@@ -165,14 +165,10 @@ echo "    ├── evolution/"
 echo "    ├── PERSONA_${YOURNAME}_GLOBAL.md"
 echo "    └── MEMORY_${YOURNAME}_GLOBAL.md"
 echo ""
-echo "Next steps:"
-echo "  1. Fill in PERSONA_${YOURNAME}_GLOBAL.md — communication style, reviewer patterns"
-echo "  2. Fill in MEMORY_${YOURNAME}_GLOBAL.md — replace [placeholders] with your values"
-echo "  3. Review ~/.claude/CLAUDE.md — fill in [CUSTOMIZE] sections for your stack"
 if ! command -v claude &>/dev/null; then
-  echo "  4. Install Claude Code: https://claude.ai/code"
+  echo "Next step: install Claude Code — https://claude.ai/code"
+  echo ""
 fi
-echo ""
 
 # ─── persona kickoff (if Claude Code is installed) ────────────────────────────
 if command -v claude &>/dev/null; then
