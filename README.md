@@ -102,6 +102,9 @@ Each session Claude will:
 | `templates/MEMORY_USERNAME_GLOBAL.md` | Session memory, file map, custom commands, CLAUDE.md starter |
 | `templates/CLAUDE.md` | Standalone CLAUDE.md starter — copy to `~/.claude/CLAUDE.md` |
 | `templates/username/` | Empty directory scaffold with `.gitkeep` |
+| `templates/commands/CREATE-PERSONA.md` | Command: intake → write a role-based persona via structured Q&A |
+| `templates/commands/CREATE-PLAN.md` | Command: intake → generate a phased plan file in `plans/` |
+| `templates/commands/CREATE-TRACKER.md` | Command: read a plan → generate a matching tracker in `trackers/` |
 
 ---
 
@@ -141,6 +144,10 @@ paridas-bootstrap/
 │   ├── PERSONA_USERNAME_GLOBAL.md
 │   ├── MEMORY_USERNAME_GLOBAL.md
 │   ├── CLAUDE.md                   ← standalone CLAUDE.md starter
+│   ├── commands/                   ← ready-to-use command files
+│   │   ├── CREATE-PERSONA.md       ← structured Q&A → persona file
+│   │   ├── CREATE-PLAN.md          ← intake → phased plan in plans/
+│   │   └── CREATE-TRACKER.md       ← plan → matching tracker in trackers/
 │   └── username/                   ← empty directory scaffold
 │       ├── insights/.gitkeep
 │       ├── learnings/.gitkeep
