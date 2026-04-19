@@ -121,13 +121,26 @@ Each session Claude will:
 
 ## Updating
 
-To get new learning guides or template improvements:
+Run the updater to check for and pull the latest version:
 
 ```bash
-git pull
-# re-run setup — existing filled files are skipped, only new files are created
-./setup.sh yourname
+cd ~/Desktop/ai/paridas-bootstrap
+./update.sh
 ```
+
+The updater will:
+1. Show the local and remote version
+2. List commits that have landed since your version
+3. Ask for confirmation before pulling
+4. Leave your workspace files (`~/Desktop/ai/<yourname>/`) untouched
+
+After updating, re-run setup to apply any new templates or commands:
+
+```bash
+./setup.sh <yourname>
+```
+
+Existing filled files (PERSONA, MEMORY, CLAUDE.md) are always skipped — only new additions are created.
 ---
 
 ## Repo Structure
