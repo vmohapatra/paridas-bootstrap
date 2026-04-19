@@ -72,11 +72,49 @@ jobs:
           echo "${NEW_VERSION}${SUFFIX}" > VERSION
           echo "Bumped $CURRENT → ${NEW_VERSION}${SUFFIX}"
 
-      - name: Commit updated VERSION
+      - name: Update CHANGELOG
+        if: steps.detect.outputs.bump != 'none' && steps.check.outputs.already_bumped == 'false'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          NEW_VERSION=$(cat VERSION | tr -d '[:space:]')
+          TODAY=$(date +%Y-%m-%d)
+
+          # Extract Description section from PR body
+          DESCRIPTION=$(echo "$PR_BODY" | awk '/^## Description/{found=1; next} found && /^---/{exit} found{print}' | sed '/^<!--/d; /^$/d' | head -5)
+
+          # Extract Summary section from PR body
+          SUMMARY=$(echo "$PR_BODY" | awk '/^## Summary/{found=1; next} found && /^---/{exit} found{print}' | sed '/^<!--/d; /^$/d' | head -3)
+
+          # Extract What Changed bullets from PR body
+          CHANGED=$(echo "$PR_BODY" | awk '/^## What Changed/{found=1; next} found && /^---/{exit} found && /^- /{print}' | head -10)
+
+          # Build new changelog entry
+          ENTRY="## [$NEW_VERSION] - $TODAY\n\n"
+          ENTRY="${ENTRY}**$PR_TITLE**\n\n"
+          if [ -n "$DESCRIPTION" ]; then
+            ENTRY="${ENTRY}${DESCRIPTION}\n\n"
+          fi
+          if [ -n "$SUMMARY" ]; then
+            ENTRY="${ENTRY}${SUMMARY}\n\n"
+          fi
+          if [ -n "$CHANGED" ]; then
+            ENTRY="${ENTRY}### Changed\n${CHANGED}\n"
+          fi
+          ENTRY="${ENTRY}\n---\n"
+
+          # Prepend entry after the header (after the first ---)
+          awk -v entry="$ENTRY" '
+            /^---$/ && !done { print; printf "\n" entry; done=1; next }
+            { print }
+          ' CHANGELOG.md > CHANGELOG.tmp && mv CHANGELOG.tmp CHANGELOG.md
+
+      - name: Commit updated VERSION and CHANGELOG
         if: steps.detect.outputs.bump != 'none' && steps.check.outputs.already_bumped == 'false'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add VERSION
-          git diff --cached --quiet || git commit -m "chore: bump version to $(cat VERSION) [auto]"
+          git add VERSION CHANGELOG.md
+          git diff --cached --quiet || git commit -m "chore: bump version to $(cat VERSION) and update changelog [auto]"
           git push
