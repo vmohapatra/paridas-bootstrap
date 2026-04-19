@@ -16,3 +16,14 @@
 
 - 
 - 
+
+---
+
+## Version Bump
+
+<!-- Check exactly one. The version-bump workflow will update VERSION automatically. -->
+
+- [ ] `patch` — bug fixes, small updates
+- [ ] `minor` — new features, non-breaking
+- [ ] `major` — breaking changes
+- [ ] `none` — docs, chore, no version change
