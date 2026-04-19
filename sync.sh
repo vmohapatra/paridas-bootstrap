@@ -54,6 +54,12 @@ if [ ! -d "$USER_DIR" ]; then
   exit 1
 fi
 
+if [ ! -f "$USER_DIR/.bootstrap-source" ]; then
+  echo "Error: $USER_DIR was not created by paridas-bootstrap."
+  echo "Run ./setup.sh $YOURNAME to initialise a bootstrap-managed workspace."
+  exit 1
+fi
+
 SYNCED_VERSION_FILE="$USER_DIR/.bootstrap-version"
 SYNCED_VERSION=$(cat "$SYNCED_VERSION_FILE" 2>/dev/null | tr -d '[:space:]')
 
