@@ -55,8 +55,8 @@ if [ ! -d "$USER_DIR" ]; then
 fi
 
 if [ ! -f "$USER_DIR/.bootstrap-source" ]; then
-  echo "Error: $USER_DIR was not created by paridas-bootstrap."
-  echo "Run ./setup.sh $YOURNAME to initialise a bootstrap-managed workspace."
+  echo "Error: No bootstrap marker found. Set up your workspace first by cloning the paridas-bootstrap repo."
+  echo "Then proceed to setup your AI workspace: ./setup.sh $YOURNAME"
   exit 1
 fi
 
