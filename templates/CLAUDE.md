@@ -21,6 +21,9 @@ At the start of every session:
 At the end of any session with 5+ messages, proactively ask:
 "Should I update relevant files under ~/Desktop/ai/<yourname>/ with learnings so far?"
 
+Note: if a tracker was marked complete this session, skip this ask — the full
+learnings + persona update process in Goal Completion covers it.
+
 ## Goal Completion — Learnings and Persona Update
 
 When a tracker file is marked complete:
@@ -39,10 +42,17 @@ Never update PERSONA, MEMORY, or evolution files without showing the proposed ch
 
 ## After a Plan Is Created
 
-After any implementation plan is created, proceed in this order without prompting:
-1. Implement the plan
-2. Review the resulting changes before finalizing
-Multi-phase plans: stop after each phase, show a summary, wait for confirmation.
+Two types of plans — different behaviours:
+
+**Implementation plans** (code, config, infra — anything with a diff):
+1. Implement without prompting
+2. Review changes before finalizing
+Multi-phase: stop after each phase, summarise, wait for confirmation.
+
+**Persona plans** (debate prep, learning, budgeting — anything tracked in plans/):
+1. Save the plan file using create-plan
+2. Immediately offer to create a tracker using create-tracker — do not wait to be asked
+3. Do not implement — execution belongs to the human
 
 ## PR Reviews
 
@@ -106,3 +116,11 @@ the previous task. Resume only if explicitly asked.
 - Build tool: [e.g. Maven / Gradle / npm / cargo]
 - Format command: [e.g. mvn ktlint:format / npm run lint:fix]
 - Field ordering rules: [e.g. alphabetize GraphQL fields]
+
+## GitHub Workflow
+- When creating new repos or pushing to GitHub, verify `gh auth setup-git` has been run before attempting `git push`
+- If using `gh` CLI, prefer `gh repo create --source=. --push` for new repos to handle auth + push in one step
+
+## Persona & Content Outputs
+- Save persona iterations, plans, and trackers to dedicated `plans/` and `trackers/` directories
+- When extending a persona, also create a test artifact demonstrating the new behaviors
