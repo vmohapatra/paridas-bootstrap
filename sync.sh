@@ -2,16 +2,16 @@
 # sync.sh — sync bootstrap-managed files into your AI workspace
 # Usage: ./sync.sh <yourname>
 #
-# Copies all bootstrap-managed files into ~/Desktop/ai/<yourname>/
-# User-added files (custom commands, personas, plans, etc.) are never touched.
-# Always run after ./update.sh to pick up new templates and commands.
+# This script is the core sync engine. A standalone launcher at
+# ~/Desktop/ai/sync.sh delegates here after ensuring the bootstrap
+# repo is present and up to date.
 
 set -e
 
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 VERSION=$(cat "$REPO_DIR/VERSION" 2>/dev/null | tr -d '[:space:]')
 
-# ─── resolve username ──────────────────────────────────────────────────────────
+# ─── resolve username ─────────────────────────────────────────────────────────
 if [ -n "$1" ]; then
   YOURNAME="$1"
 else
@@ -48,22 +48,25 @@ esac
 USER_DIR="$AI_BASE/$YOURNAME"
 TMPL="$REPO_DIR/templates/username"
 
-if [ ! -d "$USER_DIR" ]; then
-  echo "Error: workspace not found at $USER_DIR"
-  echo "Run ./setup.sh $YOURNAME first."
-  exit 1
-fi
-
-
-SYNCED_VERSION_FILE="$USER_DIR/.bootstrap-version"
-SYNCED_VERSION=$(cat "$SYNCED_VERSION_FILE" 2>/dev/null | tr -d '[:space:]')
-
 echo ""
 echo "paridas-bootstrap sync"
 echo "─────────────────────────────────────"
 echo "Bootstrap version : $VERSION"
-echo "Workspace version : ${SYNCED_VERSION:-not set}"
 echo "Workspace         : $USER_DIR"
+echo ""
+
+# ─── create workspace if missing ─────────────────────────────────────────────
+if [ ! -d "$USER_DIR" ]; then
+  echo "Workspace not found. Running setup first..."
+  echo ""
+  bash "$REPO_DIR/setup.sh" "$YOURNAME"
+  echo ""
+fi
+
+SYNCED_VERSION_FILE="$USER_DIR/.bootstrap-version"
+SYNCED_VERSION=$(cat "$SYNCED_VERSION_FILE" 2>/dev/null | tr -d '[:space:]')
+
+echo "Workspace version : ${SYNCED_VERSION:-not set}"
 echo ""
 
 if [ "$SYNCED_VERSION" = "$VERSION" ]; then

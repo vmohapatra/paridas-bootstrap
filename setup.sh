@@ -131,11 +131,21 @@ fi
 REPO_URL=$(git -C "$REPO_DIR" remote get-url origin 2>/dev/null || echo "unknown")
 cat > "$USER_DIR/.bootstrap-source" <<EOF
 repo=$REPO_URL
+bootstrap_dir=$REPO_DIR
 version=$(cat "$REPO_DIR/VERSION" 2>/dev/null | tr -d '[:space:]')
 setup=$(date +%Y-%m-%d)
 user=$YOURNAME
 EOF
 echo "  [ok] .bootstrap-source marker written"
+
+# ─── install standalone sync launcher ─────────────────────────────────────────
+sed \
+  -e "s|__BOOTSTRAP_DIR__|$REPO_DIR|g" \
+  -e "s|__BOOTSTRAP_REPO__|$REPO_URL|g" \
+  -e "s|__YOURNAME__|$YOURNAME|g" \
+  "$REPO_DIR/templates/sync-launcher.sh" > "$AI_BASE/sync.sh"
+chmod +x "$AI_BASE/sync.sh"
+echo "  [ok] standalone sync launcher written to $AI_BASE/sync.sh"
 
 # ─── summary ──────────────────────────────────────────────────────────────────
 echo ""
