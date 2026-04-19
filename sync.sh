@@ -54,11 +54,6 @@ if [ ! -d "$USER_DIR" ]; then
   exit 1
 fi
 
-if [ ! -f "$USER_DIR/.bootstrap-source" ]; then
-  echo "Error: No bootstrap marker found. Set up your workspace first by cloning the paridas-bootstrap repo."
-  echo "Then proceed to setup your AI workspace: ./setup.sh $YOURNAME"
-  exit 1
-fi
 
 SYNCED_VERSION_FILE="$USER_DIR/.bootstrap-version"
 SYNCED_VERSION=$(cat "$SYNCED_VERSION_FILE" 2>/dev/null | tr -d '[:space:]')
