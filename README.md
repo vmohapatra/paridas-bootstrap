@@ -24,23 +24,19 @@ Works on macOS, Windows (Git Bash), WSL, and Linux.
 ```bash
 git clone <this-repo> ~/Desktop/ai/paridas-bootstrap
 cd ~/Desktop/ai/paridas-bootstrap
+chmod +x setup.sh
 ./setup.sh <yourname>
 ```
 
 Replace `<yourname>` with the name you want for your workspace folder
-(e.g. `vijay`, `rparida`).
+(e.g. `vijayaa`, `rparida`).
 
 ### Option B — Claude Code skill
 
-If you already have Claude Code installed, run the bundled skill from inside
-this repo:
-
-```
-/ai-ready-setup
-```
-
-The skill reads your name from the conversation and drives the same setup
-steps interactively.
+If you already have Claude Code installed:
+1. Copy `claude-code/skills/ai-ready-setup/` to `~/.claude/skills/`
+2. Open a Claude Code session in any repo
+3. Run: `/ai-ready-setup`
 
 ---
 
@@ -49,43 +45,63 @@ steps interactively.
 Running either setup path produces:
 
 ```
-~/Desktop/ai/<yourname>/
-├── insights/          ← AI session debrief reports
-├── learnings/         ← distilled learning notes
-├── personas/          ← role-specific persona files
-├── plans/             ← project plans and outlines
-├── commands/          ← custom slash-command definitions
-├── trackers/          ← progress and habit trackers
-└── evolution/         ← role-evolution snapshots
+~/Desktop/ai/
+├── learning-guides/
+│   ├── Claude-AI-Learning-Guide.md
+│   ├── Claude-Professional-OS-Guide.md
+│   └── Cursor-AI-Learning-Guide.md
+└── <yourname>/
+    ├── PERSONA_<yourname>_GLOBAL.md    ← fill in your communication style
+    ├── MEMORY_<yourname>_GLOBAL.md     ← session memory + command reference
+    ├── insights/                       ← AI usage insights reports
+    ├── learnings/                      ← personal case library
+    ├── personas/                       ← role-based personas Claude can embody
+    ├── plans/                          ← implementation and strategy plans
+    ├── commands/                       ← custom commands built over time
+    ├── trackers/                       ← sprint, goal, and metric trackers
+    └── evolution/                      ← persona change history over time
+~/.claude/
+└── CLAUDE.md                           ← global Claude Code instructions
 ```
-
-Plus two root-level files:
-
-| File | Purpose |
-|------|---------|
-| `~/Desktop/ai/<yourname>/PERSONA_<YOURNAME>_GLOBAL.md` | Tells AI tools who you are, your background, communication style, and working preferences |
-| `~/Desktop/ai/<yourname>/MEMORY_<YOURNAME>_GLOBAL.md` | Running log of key decisions, context, and things you want AI tools to remember across sessions |
-
-And a global Claude Code config:
-
-| File | Purpose |
-|------|---------|
-| `~/.claude/CLAUDE.md` | Workspace-level instructions loaded by Claude Code on every session |
 
 ---
 
-## After setup — first three things to do
+## After Setup
 
-1. **Fill in your PERSONA file** — open `PERSONA_<YOURNAME>_GLOBAL.md` and describe
-   yourself: role, domain expertise, communication preferences, and any working
-   norms you want AI tools to respect.
+### 1. Fill in your persona file
+Open `~/Desktop/ai/<yourname>/PERSONA_<yourname>_GLOBAL.md` and fill in:
+- Your communication style and tone
+- How you review PRs and what you flag
+- Your strengths and recurring gaps
+- Your current professional focus
 
-2. **Fill in your MEMORY file** — open `MEMORY_<YOURNAME>_GLOBAL.md` and seed it
-   with the context that matters most right now: current projects, recent decisions,
-   open questions.
+### 2. Personalise your memory file
+Open `~/Desktop/ai/<yourname>/MEMORY_<yourname>_GLOBAL.md` and:
+- Add your active projects and repos
+- List key colleagues and link their persona files
+- Replace all `[placeholder]` values
 
-3. **Review CLAUDE.md** — open `~/.claude/CLAUDE.md` and tweak the default
-   Claude Code instructions to match your workflow.
+### 3. Review `~/.claude/CLAUDE.md`
+Sections marked `[CUSTOMIZE]` need your values:
+- Your build tool and lint commands
+- Priority persona files to load at session start
+
+### 4. Start using Claude Code
+Each session Claude will:
+- Auto-load your memory and persona files
+- Apply your communication style to all output
+- Prompt you at session end to capture learnings
+
+---
+
+## Templates
+
+| File | Purpose |
+|------|---------|
+| `templates/PERSONA_USERNAME_GLOBAL.md` | Communication voice, working style, reviewer patterns |
+| `templates/MEMORY_USERNAME_GLOBAL.md` | Session memory, file map, custom commands, CLAUDE.md starter |
+| `templates/CLAUDE.md` | Standalone CLAUDE.md starter — copy to `~/.claude/CLAUDE.md` |
+| `templates/username/` | Empty directory scaffold with `.gitkeep` |
 
 ---
 
@@ -100,28 +116,42 @@ And a global Claude Code config:
 
 ---
 
-## Repo layout
+## Updating
 
+To get new learning guides or template improvements:
+
+```bash
+git pull
+# re-run setup — existing filled files are skipped, only new files are created
+./setup.sh yourname
+```
+---
+
+## Repo Structure
 ```
 paridas-bootstrap/
-├── README.md                              ← you are here
-├── setup.sh                               ← cross-platform setup script
+├── README.md                       ← you are here
+├── setup.sh                        ← cross-platform bootstrap script
 ├── .gitignore
-├── learning-guides/                       ← documentation and how-to guides
+├── learning-guides/                ← guides shipped with the repo
+│   ├── Claude-AI-Learning-Guide.md
+│   ├── Claude-Professional-OS-Guide.md
+│   └── Cursor-AI-Learning-Guide.md
 ├── templates/
-│   ├── PERSONA_USERNAME_GLOBAL.md         ← persona template
-│   ├── MEMORY_USERNAME_GLOBAL.md          ← memory template
-│   ├── CLAUDE.md                          ← CLAUDE.md template
-│   └── username/
-│       ├── insights/
-│       ├── learnings/
-│       ├── personas/
-│       ├── plans/
-│       ├── commands/
-│       ├── trackers/
-│       └── evolution/
+│   ├── PERSONA_USERNAME_GLOBAL.md
+│   ├── MEMORY_USERNAME_GLOBAL.md
+│   ├── CLAUDE.md                   ← standalone CLAUDE.md starter
+│   └── username/                   ← empty directory scaffold
+│       ├── insights/.gitkeep
+│       ├── learnings/.gitkeep
+│       ├── personas/.gitkeep
+│       ├── plans/.gitkeep
+│       ├── commands/.gitkeep
+│       ├── trackers/.gitkeep
+│       └── evolution/.gitkeep
 └── claude-code/
     └── skills/
         └── ai-ready-setup/
-            └── SKILL.md                   ← Claude Code skill definition
+            └── SKILL.md            ← Claude Code skill
 ```
+
