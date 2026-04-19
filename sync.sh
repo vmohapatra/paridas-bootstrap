@@ -87,12 +87,12 @@ fi
 
 # ─── sync persona examples ────────────────────────────────────────────────────
 if [ -d "$TMPL/personas/examples" ]; then
-  mkdir -p "$USER_DIR/personas/examples"
+  mkdir -p "$USER_DIR/personas"
   for f in "$TMPL/personas/examples/"*.md; do
     [ -f "$f" ] || continue
     fname=$(basename "$f")
-    cp "$f" "$USER_DIR/personas/examples/$fname"
-    echo "  [sync] personas/examples/$fname"
+    cp "$f" "$USER_DIR/personas/$fname"
+    echo "  [sync] personas/$fname"
     UPDATED=1
   done
 fi
