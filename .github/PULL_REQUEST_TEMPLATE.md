@@ -26,4 +26,4 @@
 - [ ] `patch` — bug fixes, small updates
 - [ ] `minor` — new features, non-breaking
 - [ ] `major` — breaking changes
-- [ ] `none` — docs, chore, no version change
+- [ ] `none` — docs, chore, no version change needed
