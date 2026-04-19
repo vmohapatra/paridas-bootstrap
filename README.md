@@ -134,13 +134,13 @@ The updater will:
 3. Ask for confirmation before pulling
 4. Leave your workspace files (`~/Desktop/ai/<yourname>/`) untouched
 
-After updating, re-run setup to apply any new templates or commands:
+After updating the bootstrap repo, sync your workspace to pick up new templates and commands:
 
 ```bash
-./setup.sh <yourname>
+./sync.sh <yourname>
 ```
 
-Existing filled files (PERSONA, MEMORY, CLAUDE.md) are always skipped — only new additions are created.
+`sync.sh` copies all bootstrap-managed files (commands, persona examples, learning guides) into your workspace. Your custom files — additional commands, personal personas, plans, trackers — are never touched. Your workspace always ends up as a superset of what bootstrap provides.
 ---
 
 ## Repo Structure
