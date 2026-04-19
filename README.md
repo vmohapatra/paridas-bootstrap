@@ -102,9 +102,11 @@ Each session Claude will:
 | `templates/MEMORY_USERNAME_GLOBAL.md` | Session memory, file map, custom commands, CLAUDE.md starter |
 | `templates/CLAUDE.md` | Standalone CLAUDE.md starter — copy to `~/.claude/CLAUDE.md` |
 | `templates/username/` | Empty directory scaffold with `.gitkeep` |
-| `templates/commands/CREATE-PERSONA.md` | Command: intake → write a role-based persona via structured Q&A |
-| `templates/commands/CREATE-PLAN.md` | Command: intake → generate a phased plan file in `plans/` |
-| `templates/commands/CREATE-TRACKER.md` | Command: read a plan → generate a matching tracker in `trackers/` |
+| `templates/username/commands/create-persona.md` | Command: intake → write a role-based persona via structured Q&A |
+| `templates/username/commands/create-plan.md` | Command: intake → generate a phased plan file in `plans/` |
+| `templates/username/commands/create-tracker.md` | Command: read a plan → generate a matching tracker in `trackers/` |
+| `templates/username/commands/articulate.md` | Command: rough input → short + full clean written version |
+| `templates/username/commands/visualize-evolution.md` | Command: generate HTML dashboard from trackers and evolution files |
 
 ---
 
@@ -157,16 +159,18 @@ paridas-bootstrap/
 │   ├── PERSONA_USERNAME_GLOBAL.md
 │   ├── MEMORY_USERNAME_GLOBAL.md
 │   ├── CLAUDE.md                   ← standalone CLAUDE.md starter
-│   ├── commands/                   ← ready-to-use command files
-│   │   ├── CREATE-PERSONA.md       ← structured Q&A → persona file
-│   │   ├── CREATE-PLAN.md          ← intake → phased plan in plans/
-│   │   └── CREATE-TRACKER.md       ← plan → matching tracker in trackers/
-│   └── username/                   ← empty directory scaffold
+│   └── username/                   ← scaffold synced into user workspace
+│       ├── commands/               ← all commands (synced by sync.sh)
+│       │   ├── create-persona.md
+│       │   ├── create-plan.md
+│       │   ├── create-tracker.md
+│       │   ├── articulate.md
+│       │   └── visualize-evolution.md
+│       ├── personas/
+│       │   └── examples/           ← worked persona examples (synced to personas/)
 │       ├── insights/.gitkeep
 │       ├── learnings/.gitkeep
-│       ├── personas/.gitkeep
 │       ├── plans/.gitkeep
-│       ├── commands/.gitkeep
 │       ├── trackers/.gitkeep
 │       └── evolution/.gitkeep
 └── claude-code/
