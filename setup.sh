@@ -173,3 +173,27 @@ if ! command -v claude &>/dev/null; then
   echo "  4. Install Claude Code: https://claude.ai/code"
 fi
 echo ""
+
+# ─── persona kickoff (if Claude Code is installed) ────────────────────────────
+if command -v claude &>/dev/null; then
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo " Let's set up your first persona"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo ""
+  echo "A persona tells Claude how to think, communicate, and behave"
+  echo "in a specific role — Debate Coach, Budget Planner, Language Tutor, etc."
+  echo ""
+  printf "What role would you like Claude to take on first? (press Enter to skip): "
+  read -r PERSONA_ROLE
+  if [ -n "$PERSONA_ROLE" ]; then
+    echo ""
+    echo "Starting Claude Code session for: $PERSONA_ROLE"
+    echo ""
+    claude "Create persona for: $PERSONA_ROLE"
+  else
+    echo ""
+    echo "Skipped. When ready, open Claude Code and run:"
+    echo "  /create-persona"
+    echo ""
+  fi
+fi
