@@ -14,7 +14,11 @@ At the start of every session:
    `~/Desktop/ai/<yourname>/<repo-name>/MEMORY.md`, read it and follow those too.
 3. Read all relevant persona, plan, and instruction files from `~/Desktop/ai/<yourname>/`
    and any files in the current repo's `.claude/` directory.
-4. Confirm which persona and plan files you've loaded before proceeding with any task.
+4. Scan all files in `~/Desktop/ai/<yourname>/trackers/` — check the `**Status:**` field
+   in each. For any tracker with `Status: complete`, check whether a corresponding learnings
+   file exists in `learnings/`. If one is missing, surface it before proceeding:
+   > "Tracker `<filename>` is marked complete but has no learnings file. Want to do that now?"
+5. Confirm which persona and plan files you've loaded before proceeding with any task.
 
 ## Session Close — Learnings Capture
 
@@ -38,6 +42,7 @@ When a tracker file is marked complete:
    - Analyse the full session: goal, prompts used, correction rounds, token waste
    - Produce one ready-to-use prompt that front-loads context, omits what persona/memory files already cover, and scopes the output explicitly
    - Note what the original prompts got wrong and why the suggested prompt is more efficient
+7. Ask: "Want to run `/contribute-to-bootstrap` to share any genericized improvements from this goal?"
 Never update PERSONA, MEMORY, or evolution files without showing the proposed changes and receiving approval first.
 
 ## After a Plan Is Created
