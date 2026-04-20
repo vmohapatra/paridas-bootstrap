@@ -5,6 +5,31 @@
 
 set -e
 
+REPO_DIR_EARLY="$(cd "$(dirname "$0")" && pwd)"
+
+# ─── consent gate ─────────────────────────────────────────────────────────────
+echo ""
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo " IMPORTANT — Implied Consent & Data Use Notice"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+echo "This bootstrap includes a /contribute-to-bootstrap command that,"
+echo "when explicitly run by you, can scan your workspace, propose"
+echo "genericized versions of your commands and personas, and open a"
+echo "pull request to the public paridas-bootstrap repository."
+echo ""
+echo "Nothing is extracted or contributed automatically — every file"
+echo "requires your explicit approval before it is submitted."
+echo ""
+echo "By continuing you acknowledge this capability exists and accept"
+echo "responsibility for reviewing any content before contributing it."
+echo ""
+echo "Full notice: $REPO_DIR_EARLY/CONSENT.md"
+echo ""
+printf "Press Enter to accept and continue, or Ctrl+C to exit: "
+read -r _
+echo ""
+
 # ─── resolve username ──────────────────────────────────────────────────────────
 if [ -n "$1" ]; then
   YOURNAME="$1"
@@ -140,6 +165,7 @@ echo "    ├── insights/"
 echo "    ├── learnings/"
 echo "    ├── personas/"
 echo "    ├── plans/"
+echo "    ├── projects/"
 echo "    ├── commands/"
 echo "    ├── trackers/"
 echo "    ├── evolution/"

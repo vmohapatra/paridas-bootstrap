@@ -3,6 +3,8 @@
 A portable AI workspace bootstrap — get a consistent, structured working environment
 on any device in minutes.
 
+> **Before running setup.sh, read [CONSENT.md](CONSENT.md).** Setup requires explicit agreement to the data use notice. If you do not agree, do not proceed.
+
 ---
 
 ## What this repo is
@@ -51,12 +53,13 @@ chmod +x setup.sh
 Replace `<yourname>` with the name you want for your workspace folder (e.g. `vijayaa`, `rparida`).
 
 **What setup does:**
-1. Creates `~/Desktop/ai/<yourname>/` with the full directory structure
-2. Copies and personalises PERSONA, MEMORY, and CLAUDE.md starter files
-3. Writes a `.bootstrap-source` marker recording the repo origin and version
-4. Installs a standalone `~/Desktop/ai/sync.sh` launcher (works even if the bootstrap repo is later deleted)
-5. Installs the `ai-ready-setup` Claude Code skill if Claude Code is present
-6. If Claude Code is installed — prompts for your first role and launches the persona creation workflow
+1. Displays the [data use notice](CONSENT.md) — press Enter to accept, Ctrl+C to exit
+2. Creates `~/Desktop/ai/<yourname>/` with the full directory structure
+3. Copies and personalises PERSONA, MEMORY, and CLAUDE.md starter files
+4. Writes a `.bootstrap-source` marker recording the repo origin and version
+5. Installs a standalone `~/Desktop/ai/sync.sh` launcher (works even if the bootstrap repo is later deleted)
+6. **If Claude Code is installed:** imports the `ai-ready-setup` skill, appends `templates/CLAUDE.md` to `~/.claude/CLAUDE.md`, and prompts for your first role
+7. **If Claude Code is not installed:** prints the install command and asks you to re-run setup after installing
 
 ---
 
@@ -133,19 +136,22 @@ All commands live in `commands/` and are invoked inside a Claude Code session wi
 | `/articulate` | Takes rough input → produces short + full clean written versions |
 | `/visualize-evolution` | Reads trackers and evolution files → generates an HTML progress dashboard |
 | `/evolve-global-persona` | Reads all role personas → proposes updates to your global persona |
+| `/contribute-to-bootstrap` | Discovers workspace improvements, generalizes them, and opens a draft PR back to bootstrap |
 
 ### The persona lifecycle
 
 ```
 /create-persona          Build a role-based persona (Debate Coach, Budget Planner, etc.)
         ↓
-/create-plan             Plan a goal using that persona
+/create-plan             Topic plan (one-off) or ongoing plan (recurring work)
         ↓
 /create-tracker          Track execution against the plan
         ↓
   tracker complete       Learnings file created → persona updates proposed → evolution file updated
         ↓
 /evolve-global-persona   Cross-cutting patterns from all role personas → global persona sharpened
+        ↓
+/contribute-to-bootstrap Generalize new commands and personas → approve file by file → draft PR to bootstrap
 ```
 
 ---
@@ -172,6 +178,7 @@ These show the full persona structure: framework, output types, failure modes, r
 | `templates/CLAUDE.md` | Standalone CLAUDE.md starter — copy to `~/.claude/CLAUDE.md` |
 | `templates/sync-launcher.sh` | Source for the standalone sync launcher written to `~/Desktop/ai/sync.sh` |
 | `templates/username/commands/` | All command files (synced to your `commands/` folder) |
+| `templates/username/personas/PERSONA_ROLE.md` | Blank persona structure — copy and fill in to create a new role |
 | `templates/username/personas/examples/` | Worked persona examples (synced to your `personas/` folder) |
 | `templates/username/plans/SAMPLE-plan.md` | Plan file structure reference |
 | `templates/username/trackers/SAMPLE-tracker.md` | Tracker file structure reference |
@@ -221,13 +228,18 @@ The version bump workflow runs automatically and commits the updated `VERSION` a
 ```
 paridas-bootstrap/
 ├── README.md
+├── DOCUMENTATION.md                    ← full new-user reference
+├── CONSENT.md                          ← data use notice (displayed at setup)
 ├── CHANGELOG.md
 ├── VERSION
 ├── setup.sh                            ← one-time workspace creation
 ├── update.sh                           ← keep bootstrap repo current with GitHub
 ├── sync.sh                             ← keep workspace current with bootstrap repo
+├── contribute.sh                       ← opens a draft PR for workspace contributions
+├── auto-contribute.sh                  ← background contribution (fired on tracker complete)
 ├── .gitignore
 ├── .github/
+│   ├── CODEOWNERS                      ← all PRs require @vmohapatra review
 │   ├── PULL_REQUEST_TEMPLATE.md
 │   └── workflows/
 │       └── version-bump.yml            ← auto version bump + changelog on PR
@@ -247,7 +259,8 @@ paridas-bootstrap/
 │       │   ├── create-tracker.md
 │       │   ├── articulate.md
 │       │   ├── visualize-evolution.md
-│       │   └── evolve-global-persona.md
+│       │   ├── evolve-global-persona.md
+│       │   └── contribute-to-bootstrap.md
 │       ├── personas/
 │       │   └── examples/
 │       │       ├── PERSONA_DEBATE-COACH.md

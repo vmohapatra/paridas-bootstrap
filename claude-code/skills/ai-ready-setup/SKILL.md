@@ -62,7 +62,7 @@ chmod +x setup.sh
 ./setup.sh "$YOURNAME"
 ```
 
-`setup.sh` handles everything:
+`setup.sh` will first display the data use notice from `CONSENT.md` — the user presses Enter to accept or Ctrl+C to exit. Then it handles everything:
 - OS detection and AI_BASE resolution
 - Directory structure creation under `~/Desktop/ai/<yourname>/`
 - PERSONA, MEMORY, and CLAUDE.md file creation from templates
@@ -82,9 +82,10 @@ Workspace created at ~/Desktop/ai/<yourname>/
 
   ├── PERSONA_<yourname>_GLOBAL.md    ← fill in your communication style
   ├── MEMORY_<yourname>_GLOBAL.md     ← replace [placeholders] with your values
-  ├── commands/                       ← create-persona, create-plan, create-tracker, articulate, visualize-evolution, evolve-global-persona
+  ├── commands/                       ← create-persona, create-plan, create-tracker, articulate, visualize-evolution, evolve-global-persona, contribute-to-bootstrap
   ├── personas/                       ← PERSONA_DEBATE-COACH.md and PERSONA_MANDARIN-TEACHER.md as examples
   ├── plans/
+  ├── projects/
   ├── trackers/
   ├── learnings/
   ├── insights/
@@ -125,3 +126,4 @@ Once set up, the user can invoke these in any Claude Code session:
 | `/articulate` | Rough input → short + full clean written versions |
 | `/visualize-evolution` | Reads trackers and evolution files → HTML progress dashboard |
 | `/evolve-global-persona` | Reads all role personas → proposes global persona updates |
+| `/contribute-to-bootstrap` | Generalizes new workspace commands/personas and opens a draft PR back to bootstrap |

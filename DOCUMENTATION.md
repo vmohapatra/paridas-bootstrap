@@ -15,8 +15,11 @@ paridas-bootstrap/
 ├── setup.sh                    ← one-time workspace creator
 ├── sync.sh                     ← syncs bootstrap files into user workspace
 ├── update.sh                   ← pulls latest bootstrap from GitHub
+├── contribute.sh               ← opens a draft PR for workspace contributions
+├── auto-contribute.sh          ← background contribution (fired on tracker complete)
 ├── VERSION                     ← semver (e.g. 0.0.2-SNAPSHOT)
 ├── CHANGELOG.md                ← auto-updated by PR workflow
+├── CONSENT.md                  ← data use notice (displayed at setup)
 ├── DOCUMENTATION.md            ← this file
 ├── README.md                   ← repo overview
 ├── templates/
@@ -25,7 +28,7 @@ paridas-bootstrap/
 │   ├── MEMORY_USERNAME_GLOBAL.md
 │   ├── sync-launcher.sh        ← template for ~/Desktop/ai/sync.sh
 │   └── username/               ← everything synced into user workspace
-│       ├── commands/           ← 6 slash commands
+│       ├── commands/           ← 7 slash commands (includes contribute-to-bootstrap)
 │       ├── personas/examples/  ← worked persona examples
 │       ├── plans/
 │       ├── projects/
@@ -38,6 +41,7 @@ paridas-bootstrap/
 │       └── ai-ready-setup/
 │           └── SKILL.md        ← Claude Code skill
 └── .github/
+    ├── CODEOWNERS              ← all PRs require @vmohapatra review
     ├── PULL_REQUEST_TEMPLATE.md
     └── workflows/
         └── version-bump.yml    ← auto version bump on PR merge
@@ -57,6 +61,7 @@ paridas-bootstrap/
 
 Run `./setup.sh <yourname>` and it:
 
+0. Displays the data use notice from `CONSENT.md` — press Enter to accept, Ctrl+C to exit
 1. Creates `~/Desktop/ai/<yourname>/` with this structure:
 ```
 <yourname>/
@@ -111,6 +116,7 @@ Run `./setup.sh <yourname>` and it:
 | `/articulate` | Takes rough input → produces short + full clean written versions |
 | `/visualize-evolution` | Reads trackers + evolution files → generates a self-contained HTML dashboard |
 | `/evolve-global-persona` | Reads all role personas → proposes updates to global persona (waits for confirmation before writing) |
+| `/contribute-to-bootstrap` | Discovers new commands and personas in your workspace, generalizes them, and opens a draft PR back to the bootstrap repo |
 
 ---
 
@@ -145,6 +151,14 @@ Run `./setup.sh <yourname>` and it:
 
 Each role you build makes the next session smarter. The global persona becomes a distillation of how you actually work across all contexts.
 
+The loop closes back to bootstrap:
+```
+/contribute-to-bootstrap → discovers new commands and personas in your workspace
+                         → Claude generalizes each one (removes personal specifics)
+                         → you approve file by file
+                         → contribute.sh opens a draft PR to paridas-bootstrap
+```
+
 ---
 
 ## Example workspace walkthrough
@@ -153,7 +167,7 @@ Each role you build makes the next session smarter. The global persona becomes a
 ```bash
 ./setup.sh alex
 ```
-Claude is installed → skill imported, CLAUDE.md updated, prompted for first persona.
+Consent notice displayed → Alex presses Enter → Claude is installed → skill imported, CLAUDE.md updated, prompted for first persona.
 
 Alex says **"Chess Coach"** → `/create-persona` runs, asks 5 questions, writes:
 `personas/PERSONA_CHESS-COACH.md`
