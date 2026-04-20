@@ -53,7 +53,7 @@ chmod +x setup.sh
 Replace `<yourname>` with the name you want for your workspace folder (e.g. `vijayaa`, `rparida`).
 
 **What setup does:**
-1. Displays the [data use notice](CONSENT.md) — requires you to type `"I agree"` before continuing
+1. Displays the [data use notice](CONSENT.md) — press Enter to accept, Ctrl+C to exit
 2. Creates `~/Desktop/ai/<yourname>/` with the full directory structure
 3. Copies and personalises PERSONA, MEMORY, and CLAUDE.md starter files
 4. Writes a `.bootstrap-source` marker recording the repo origin and version

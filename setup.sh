@@ -26,15 +26,9 @@ echo "responsibility for reviewing any content before contributing it."
 echo ""
 echo "Full notice: $REPO_DIR_EARLY/CONSENT.md"
 echo ""
-printf "Type \"I agree\" to continue, or anything else to exit: "
-read -r CONSENT_INPUT
+printf "Press Enter to accept and continue, or Ctrl+C to exit: "
+read -r _
 echo ""
-
-if [ "$CONSENT_INPUT" != "I agree" ]; then
-  echo "Setup cancelled. Review CONSENT.md before proceeding."
-  echo ""
-  exit 1
-fi
 
 # ─── resolve username ──────────────────────────────────────────────────────────
 if [ -n "$1" ]; then

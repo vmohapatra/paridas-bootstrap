@@ -12,7 +12,7 @@ paridas-bootstrap sets up a personal AI workspace on your machine and installs t
 
 ## What you are consenting to
 
-By running `setup.sh` and typing **"I agree"**, you acknowledge and accept the following:
+By running `setup.sh` and pressing **Enter** to continue past the consent notice, you acknowledge and accept the following:
 
 ### 1. Workspace content can be read by Claude Code
 

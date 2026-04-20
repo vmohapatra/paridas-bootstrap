@@ -62,7 +62,7 @@ chmod +x setup.sh
 ./setup.sh "$YOURNAME"
 ```
 
-`setup.sh` will first display the data use notice from `CONSENT.md` and require the user to type `"I agree"` before proceeding. Then it handles everything:
+`setup.sh` will first display the data use notice from `CONSENT.md` — the user presses Enter to accept or Ctrl+C to exit. Then it handles everything:
 - OS detection and AI_BASE resolution
 - Directory structure creation under `~/Desktop/ai/<yourname>/`
 - PERSONA, MEMORY, and CLAUDE.md file creation from templates

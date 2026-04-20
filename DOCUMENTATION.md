@@ -61,7 +61,7 @@ paridas-bootstrap/
 
 Run `./setup.sh <yourname>` and it:
 
-0. Displays the data use notice from `CONSENT.md` — requires you to type `"I agree"` before continuing
+0. Displays the data use notice from `CONSENT.md` — press Enter to accept, Ctrl+C to exit
 1. Creates `~/Desktop/ai/<yourname>/` with this structure:
 ```
 <yourname>/
@@ -167,7 +167,7 @@ The loop closes back to bootstrap:
 ```bash
 ./setup.sh alex
 ```
-Consent notice displayed → Alex types `"I agree"` → Claude is installed → skill imported, CLAUDE.md updated, prompted for first persona.
+Consent notice displayed → Alex presses Enter → Claude is installed → skill imported, CLAUDE.md updated, prompted for first persona.
 
 Alex says **"Chess Coach"** → `/create-persona` runs, asks 5 questions, writes:
 `personas/PERSONA_CHESS-COACH.md`
