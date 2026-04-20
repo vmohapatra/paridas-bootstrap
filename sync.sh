@@ -3,7 +3,7 @@
 # Usage: ./sync.sh <yourname>
 #
 # This script is the core sync engine. A standalone launcher at
-# ~/Desktop/ai/sync.sh delegates here after ensuring the bootstrap
+# $AI_BASE/sync.sh delegates here after ensuring the bootstrap
 # repo is present and up to date.
 
 set -e
@@ -25,25 +25,8 @@ if [ -z "$YOURNAME" ]; then
 fi
 
 # ─── detect AI_BASE ───────────────────────────────────────────────────────────
-OS_TYPE=$(uname -s 2>/dev/null || echo "Windows")
-case "$OS_TYPE" in
-  Darwin|MINGW*|MSYS*|CYGWIN*)
-    AI_BASE=~/Desktop/ai
-    ;;
-  Linux)
-    if grep -qi microsoft /proc/version 2>/dev/null; then
-      WIN_USER=$(cmd.exe /c "echo %USERNAME%" 2>/dev/null | tr -d '\r')
-      AI_BASE=/mnt/c/Users/$WIN_USER/Desktop/ai
-    elif [ -d ~/Desktop ]; then
-      AI_BASE=~/Desktop/ai
-    else
-      AI_BASE=~/ai
-    fi
-    ;;
-  *)
-    AI_BASE=~/Desktop/ai
-    ;;
-esac
+# Derive from repo location — always correct regardless of OneDrive, local Desktop, etc.
+AI_BASE="$(dirname "$REPO_DIR")"
 
 USER_DIR="$AI_BASE/$YOURNAME"
 TMPL="$REPO_DIR/templates/username"
@@ -83,7 +66,7 @@ if [ -d "$TMPL/commands" ]; then
   for f in "$TMPL/commands/"*.md; do
     [ -f "$f" ] || continue
     fname=$(basename "$f")
-    cp "$f" "$USER_DIR/commands/$fname"
+    sed "s|~/Desktop/ai/<yourname>/|$AI_BASE/$YOURNAME/|g" "$f" > "$USER_DIR/commands/$fname"
     echo "  [sync] commands/$fname"
     UPDATED=1
   done
@@ -95,7 +78,7 @@ if [ -d "$TMPL/personas/examples" ]; then
   for f in "$TMPL/personas/examples/"*.md; do
     [ -f "$f" ] || continue
     fname=$(basename "$f")
-    cp "$f" "$USER_DIR/personas/$fname"
+    sed "s|~/Desktop/ai/<yourname>/|$AI_BASE/$YOURNAME/|g" "$f" > "$USER_DIR/personas/$fname"
     echo "  [sync] personas/$fname"
     UPDATED=1
   done
