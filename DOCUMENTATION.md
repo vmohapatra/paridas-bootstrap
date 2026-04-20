@@ -111,6 +111,7 @@ Run `./setup.sh <yourname>` and it:
 | `/articulate` | Takes rough input → produces short + full clean written versions |
 | `/visualize-evolution` | Reads trackers + evolution files → generates a self-contained HTML dashboard |
 | `/evolve-global-persona` | Reads all role personas → proposes updates to global persona (waits for confirmation before writing) |
+| `/contribute-to-bootstrap` | Discovers new commands and personas in your workspace, generalizes them, and opens a draft PR back to the bootstrap repo |
 
 ---
 
@@ -144,6 +145,14 @@ Run `./setup.sh <yourname>` and it:
 ```
 
 Each role you build makes the next session smarter. The global persona becomes a distillation of how you actually work across all contexts.
+
+The loop closes back to bootstrap:
+```
+/contribute-to-bootstrap → discovers new commands and personas in your workspace
+                         → Claude generalizes each one (removes personal specifics)
+                         → you approve file by file
+                         → contribute.sh opens a draft PR to paridas-bootstrap
+```
 
 ---
 

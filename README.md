@@ -133,6 +133,7 @@ All commands live in `commands/` and are invoked inside a Claude Code session wi
 | `/articulate` | Takes rough input → produces short + full clean written versions |
 | `/visualize-evolution` | Reads trackers and evolution files → generates an HTML progress dashboard |
 | `/evolve-global-persona` | Reads all role personas → proposes updates to your global persona |
+| `/contribute-to-bootstrap` | Discovers workspace improvements, generalizes them, and opens a draft PR back to bootstrap |
 
 ### The persona lifecycle
 
