@@ -114,17 +114,16 @@ else
   echo "  [skip] ~/.claude/CLAUDE.md already exists — review $CLAUDE_SRC manually and merge what you need"
 fi
 
-# ─── install Claude Code skill (if ~/.claude/skills exists or can be created) ──
-SKILL_SRC="$REPO_DIR/claude-code/skills/ai-ready-setup"
-SKILL_DST=~/.claude/skills/ai-ready-setup
-if [ -d "$SKILL_SRC" ]; then
+# ─── install Claude Code skills ───────────────────────────────────────────────
+SKILLS_SRC="$REPO_DIR/claude-code/skills"
+if [ -d "$SKILLS_SRC" ] && [ -d ~/.claude ]; then
   mkdir -p ~/.claude/skills
-  if [ ! -d "$SKILL_DST" ]; then
-    cp -r "$SKILL_SRC" "$SKILL_DST"
-    echo "  [ok] ai-ready-setup skill installed to ~/.claude/skills/"
-  else
-    echo "  [skip] ai-ready-setup skill already installed"
-  fi
+  for skill_dir in "$SKILLS_SRC"/*/; do
+    [ -d "$skill_dir" ] || continue
+    skill_name=$(basename "$skill_dir")
+    cp -r "$skill_dir" ~/.claude/skills/
+    echo "  [ok] skill installed/updated: ~/.claude/skills/$skill_name"
+  done
 fi
 
 # ─── write bootstrap marker ───────────────────────────────────────────────────

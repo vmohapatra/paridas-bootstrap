@@ -113,6 +113,19 @@ if [ -d "$REPO_DIR/learning-guides" ]; then
   done
 fi
 
+# ─── sync Claude Code skills ──────────────────────────────────────────────────
+SKILLS_SRC="$REPO_DIR/claude-code/skills"
+if [ -d "$SKILLS_SRC" ] && [ -d ~/.claude ]; then
+  mkdir -p ~/.claude/skills
+  for skill_dir in "$SKILLS_SRC"/*/; do
+    [ -d "$skill_dir" ] || continue
+    skill_name=$(basename "$skill_dir")
+    cp -r "$skill_dir" ~/.claude/skills/
+    echo "  [sync] ~/.claude/skills/$skill_name"
+    UPDATED=1
+  done
+fi
+
 # ─── record synced version ────────────────────────────────────────────────────
 echo "$VERSION" > "$SYNCED_VERSION_FILE"
 
