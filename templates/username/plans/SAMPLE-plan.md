@@ -12,9 +12,9 @@
 
 | Date | Step | Deliverable |
 |------|------|-------------|
-| YYYY-MM-DD | [e.g. generated topic brief with pro/con breakdown] | DOMAIN_TOPIC-BRIEF_topic.md |
-| YYYY-MM-DD | [e.g. assessed draft or submission] | DOMAIN_FEEDBACK_topic.md |
-| YYYY-MM-DD | [e.g. suggested follow-up approach] | — |
+| YYYY-MM-DD | Generated topic brief with pro/con breakdown | DEBATE_TOPIC-BRIEF_box-lunches-vs-school-lunches.md |
+| YYYY-MM-DD | Assessed student opening speech | DEBATE_SCRIPT-FEEDBACK_box-lunches-vs-school-lunches.md |
+| YYYY-MM-DD | Suggested rebuttal structure | — |
 
 ---
 
@@ -45,5 +45,5 @@ Update this when new patterns emerge — not a step-by-step log.]
 
 | Date | Session focus | Deliverable | Pattern noted |
 |------|---------------|-------------|---------------|
-| YYYY-MM-DD | [what this session covered] | DOMAIN_TYPE_subject.ext | [approach or pattern observed] |
-| YYYY-MM-DD | [what this session covered] | — | — |
+| YYYY-MM-DD | Built interactive board with legal move validation | chess.html | Always scaffold UI before adding game logic |
+| YYYY-MM-DD | Added opening drills for e4 and d4 | CHESS_DRILL_openings.md | — |

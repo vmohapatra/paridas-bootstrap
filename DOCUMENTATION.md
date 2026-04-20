@@ -30,16 +30,17 @@ Run `./setup.sh <yourname>` and it:
 ├── personas/                      ← role-based personas (Debate Coach, etc.)
 ├── commands/                      ← slash commands you use in Claude
 ├── plans/                         ← activity logs and methodology, per persona
-│   ├── <persona-slug>/
-│   │   └── PLAN_<topic-slug>.md           ← topic plan (steps taken)
-│   └── <persona-slug>/
-│       └── PLAN_<persona-slug>.md         ← ongoing plan (patterns + approach)
+│   ├── debate-coach/
+│   │   └── PLAN_box-lunches-vs-school-lunches.md  ← topic plan (steps taken)
+│   └── chess-coach/
+│       └── PLAN_chess-coach.md                    ← ongoing plan (patterns + approach)
 ├── projects/                      ← deliverables — docs, HTML, analysis outputs
-│   ├── <persona-slug>/                    ← topic plan: subfolder per topic
-│   │   └── <topic-slug>/
-│   │       └── DOMAIN_TYPE_topic.ext
-│   └── <persona-slug>/                    ← ongoing plan: deliverables directly in folder
-│       └── output.ext
+│   ├── debate-coach/                              ← topic plan: subfolder per topic
+│   │   └── box-lunches-vs-school-lunches/
+│   │       ├── DEBATE_TOPIC-BRIEF_box-lunches-vs-school-lunches.md
+│   │       └── DEBATE_SCRIPT-FEEDBACK_box-lunches-vs-school-lunches.md
+│   └── chess-coach/                               ← ongoing plan: deliverables directly in folder
+│       └── chess.html
 ├── trackers/                      ← progress tracking against goals
 ├── learnings/                     ← what you captured after completing goals
 ├── evolution/                     ← how your personas changed over time
