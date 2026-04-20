@@ -103,36 +103,9 @@ else
   echo "  [skip] MEMORY_${YOURNAME}_GLOBAL.md already exists"
 fi
 
-# CLAUDE.md
 CLAUDE_SRC="$TMPL/CLAUDE.md"
 CLAUDE_DST=~/.claude/CLAUDE.md
 mkdir -p ~/.claude
-if [ ! -f "$CLAUDE_DST" ]; then
-  sed "s/<yourname>/$YOURNAME/g" "$CLAUDE_SRC" > "$CLAUDE_DST"
-  echo "  [ok] ~/.claude/CLAUDE.md created"
-elif command -v claude &>/dev/null; then
-  if ! grep -qF "$(head -3 "$CLAUDE_SRC" | tail -1)" "$CLAUDE_DST"; then
-    echo "" >> "$CLAUDE_DST"
-    sed "s/<yourname>/$YOURNAME/g" "$CLAUDE_SRC" >> "$CLAUDE_DST"
-    echo "  [ok] ~/.claude/CLAUDE.md updated with bootstrap template"
-  else
-    echo "  [skip] ~/.claude/CLAUDE.md already contains bootstrap template"
-  fi
-else
-  echo "  [skip] ~/.claude/CLAUDE.md already exists — review $CLAUDE_SRC manually and merge what you need"
-fi
-
-# ─── install Claude Code skills ───────────────────────────────────────────────
-SKILLS_SRC="$REPO_DIR/claude-code/skills"
-if [ -d "$SKILLS_SRC" ] && [ -d ~/.claude ]; then
-  mkdir -p ~/.claude/skills
-  for skill_dir in "$SKILLS_SRC"/*/; do
-    [ -d "$skill_dir" ] || continue
-    skill_name=$(basename "$skill_dir")
-    cp -r "$skill_dir" ~/.claude/skills/
-    echo "  [ok] skill installed/updated: ~/.claude/skills/$skill_name"
-  done
-fi
 
 # ─── write bootstrap marker ───────────────────────────────────────────────────
 REPO_URL=$(git -C "$REPO_DIR" remote get-url origin 2>/dev/null || echo "unknown")
@@ -172,13 +145,35 @@ echo "    ├── evolution/"
 echo "    ├── PERSONA_${YOURNAME}_GLOBAL.md"
 echo "    └── MEMORY_${YOURNAME}_GLOBAL.md"
 echo ""
-if ! command -v claude &>/dev/null; then
-  echo "Next step: install Claude Code — https://claude.ai/code"
-  echo ""
-fi
-
-# ─── persona kickoff (if Claude Code is installed) ────────────────────────────
+# ─── Claude Code integration ──────────────────────────────────────────────────
 if command -v claude &>/dev/null; then
+
+  # Import ai-ready-setup skill
+  SKILLS_SRC="$REPO_DIR/claude-code/skills"
+  if [ -d "$SKILLS_SRC" ]; then
+    mkdir -p ~/.claude/skills
+    for skill_dir in "$SKILLS_SRC"/*/; do
+      [ -d "$skill_dir" ] || continue
+      skill_name=$(basename "$skill_dir")
+      cp -r "$skill_dir" ~/.claude/skills/
+      echo "  [ok] skill imported: ~/.claude/skills/$skill_name"
+    done
+  fi
+
+  # Update ~/.claude/CLAUDE.md with bootstrap template (dedup)
+  if [ ! -f "$CLAUDE_DST" ]; then
+    sed "s/<yourname>/$YOURNAME/g" "$CLAUDE_SRC" > "$CLAUDE_DST"
+    echo "  [ok] ~/.claude/CLAUDE.md created"
+  elif ! grep -q "# CLAUDE.md Starter Template" "$CLAUDE_DST"; then
+    echo "" >> "$CLAUDE_DST"
+    sed "s/<yourname>/$YOURNAME/g" "$CLAUDE_SRC" >> "$CLAUDE_DST"
+    echo "  [ok] ~/.claude/CLAUDE.md updated with bootstrap template"
+  else
+    echo "  [skip] ~/.claude/CLAUDE.md already contains bootstrap template"
+  fi
+
+  # Persona kickoff
+  echo ""
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   echo " Let's set up your first persona"
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -199,4 +194,21 @@ if command -v claude &>/dev/null; then
     echo "  /create-persona"
     echo ""
   fi
+
+else
+
+  echo ""
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo " Claude Code not detected"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo ""
+  echo "Install Claude Code with:"
+  echo ""
+  echo "  curl -fsSL https://claude.ai/install.sh | sh"
+  echo ""
+  echo "Then re-run this script to import the skill and complete setup:"
+  echo ""
+  echo "  ./setup.sh $YOURNAME"
+  echo ""
+
 fi
