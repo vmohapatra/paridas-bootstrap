@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # update.sh — check for and apply updates to paridas-bootstrap
-# Run from anywhere: ~/Desktop/ai/paridas-bootstrap/update.sh
+# Run from anywhere: cd <your-ai-folder>/paridas-bootstrap && ./update.sh
 
 set -e
 

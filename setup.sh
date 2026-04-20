@@ -46,29 +46,11 @@ fi
 # ─── detect OS and set AI_BASE ─────────────────────────────────────────────────
 OS_TYPE=$(uname -s 2>/dev/null || echo "Windows")
 
-case "$OS_TYPE" in
-  Darwin)
-    AI_BASE=~/Desktop/ai
-    ;;
-  MINGW*|MSYS*|CYGWIN*)
-    AI_BASE=~/Desktop/ai
-    ;;
-  Linux)
-    if grep -qi microsoft /proc/version 2>/dev/null; then
-      WIN_USER=$(cmd.exe /c "echo %USERNAME%" 2>/dev/null | tr -d '\r')
-      AI_BASE=/mnt/c/Users/$WIN_USER/Desktop/ai
-    elif [ -d ~/Desktop ]; then
-      AI_BASE=~/Desktop/ai
-    else
-      AI_BASE=~/ai
-    fi
-    ;;
-  *)
-    AI_BASE=~/Desktop/ai
-    ;;
-esac
-
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Derive AI_BASE from repo location — this is always correct regardless of
+# whether the repo was cloned to OneDrive Desktop, local Desktop, or elsewhere.
+AI_BASE="$(dirname "$REPO_DIR")"
 USER_DIR="$AI_BASE/$YOURNAME"
 
 echo ""
@@ -113,7 +95,7 @@ TMPL="$REPO_DIR/templates"
 PERSONA_SRC="$TMPL/PERSONA_USERNAME_GLOBAL.md"
 PERSONA_DST="$USER_DIR/PERSONA_${YOURNAME}_GLOBAL.md"
 if [ ! -f "$PERSONA_DST" ]; then
-  sed "s/<yourname>/$YOURNAME/g; s/USERNAME/$YOURNAME/g" "$PERSONA_SRC" > "$PERSONA_DST"
+  sed "s|~/Desktop/ai/|$AI_BASE/|g; s/<yourname>/$YOURNAME/g; s/USERNAME/$YOURNAME/g" "$PERSONA_SRC" > "$PERSONA_DST"
   echo "  [ok] PERSONA_${YOURNAME}_GLOBAL.md created"
 else
   echo "  [skip] PERSONA_${YOURNAME}_GLOBAL.md already exists"
@@ -123,7 +105,7 @@ fi
 MEMORY_SRC="$TMPL/MEMORY_USERNAME_GLOBAL.md"
 MEMORY_DST="$USER_DIR/MEMORY_${YOURNAME}_GLOBAL.md"
 if [ ! -f "$MEMORY_DST" ]; then
-  sed "s/<yourname>/$YOURNAME/g; s/USERNAME/$YOURNAME/g" "$MEMORY_SRC" > "$MEMORY_DST"
+  sed "s|~/Desktop/ai/|$AI_BASE/|g; s/<yourname>/$YOURNAME/g; s/USERNAME/$YOURNAME/g" "$MEMORY_SRC" > "$MEMORY_DST"
   echo "  [ok] MEMORY_${YOURNAME}_GLOBAL.md created"
 else
   echo "  [skip] MEMORY_${YOURNAME}_GLOBAL.md already exists"
@@ -132,6 +114,29 @@ fi
 CLAUDE_SRC="$TMPL/CLAUDE.md"
 CLAUDE_DST=~/.claude/CLAUDE.md
 mkdir -p ~/.claude
+
+# ─── copy commands and personas from templates ────────────────────────────────
+TMPL_USER="$TMPL/username"
+
+if [ -d "$TMPL_USER/commands" ]; then
+  for f in "$TMPL_USER/commands/"*.md; do
+    [ -f "$f" ] || continue
+    sed "s|~/Desktop/ai/<yourname>/|$AI_BASE/$YOURNAME/|g" "$f" > "$USER_DIR/commands/$(basename "$f")"
+  done
+  echo "  [ok] commands/ populated from templates"
+fi
+
+if [ -d "$TMPL_USER/personas" ]; then
+  [ -f "$TMPL_USER/personas/PERSONA_ROLE.md" ] && \
+    sed "s|~/Desktop/ai/<yourname>/|$AI_BASE/$YOURNAME/|g" "$TMPL_USER/personas/PERSONA_ROLE.md" > "$USER_DIR/personas/PERSONA_ROLE.md"
+  if [ -d "$TMPL_USER/personas/examples" ]; then
+    for f in "$TMPL_USER/personas/examples/"*.md; do
+      [ -f "$f" ] || continue
+      sed "s|~/Desktop/ai/<yourname>/|$AI_BASE/$YOURNAME/|g" "$f" > "$USER_DIR/personas/$(basename "$f")"
+    done
+    echo "  [ok] personas/ populated with examples"
+  fi
+fi
 
 # ─── write bootstrap marker ───────────────────────────────────────────────────
 REPO_URL=$(git -C "$REPO_DIR" remote get-url origin 2>/dev/null || echo "unknown")
@@ -143,6 +148,10 @@ setup=$(date +%Y-%m-%d)
 user=$YOURNAME
 EOF
 echo "  [ok] .bootstrap-source marker written"
+
+# Write bootstrap version so sync.sh knows setup already ran at this version
+cat "$REPO_DIR/VERSION" 2>/dev/null | tr -d '[:space:]' > "$USER_DIR/.bootstrap-version"
+echo "  [ok] .bootstrap-version written"
 
 # ─── install standalone sync launcher ─────────────────────────────────────────
 sed \
@@ -189,11 +198,11 @@ if command -v claude &>/dev/null; then
 
   # Update ~/.claude/CLAUDE.md with bootstrap template (dedup)
   if [ ! -f "$CLAUDE_DST" ]; then
-    sed "s/<yourname>/$YOURNAME/g" "$CLAUDE_SRC" > "$CLAUDE_DST"
+    sed "s|~/Desktop/ai/|$AI_BASE/|g; s/<yourname>/$YOURNAME/g" "$CLAUDE_SRC" > "$CLAUDE_DST"
     echo "  [ok] ~/.claude/CLAUDE.md created"
   elif ! grep -q "## Session Start" "$CLAUDE_DST"; then
     echo "" >> "$CLAUDE_DST"
-    sed "s/<yourname>/$YOURNAME/g" "$CLAUDE_SRC" >> "$CLAUDE_DST"
+    sed "s|~/Desktop/ai/|$AI_BASE/|g; s/<yourname>/$YOURNAME/g" "$CLAUDE_SRC" >> "$CLAUDE_DST"
     echo "  [ok] ~/.claude/CLAUDE.md updated with bootstrap template"
   else
     echo "  [skip] ~/.claude/CLAUDE.md already contains bootstrap template"

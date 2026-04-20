@@ -17,7 +17,9 @@ This skill is the Claude Code entry point — it requires the bootstrap repo to 
 The paridas-bootstrap repo must be cloned locally before this skill runs:
 
 ```bash
-git clone https://github.com/vmohapatra/paridas-bootstrap ~/Desktop/ai/paridas-bootstrap
+# Clone into the ai/ folder wherever you keep your work, e.g.:
+git clone https://github.com/vmohapatra/paridas-bootstrap ~/OneDrive/Desktop/ai/paridas-bootstrap
+# The workspace will be created as a sibling to this folder.
 ```
 
 If the repo is not found, instruct the user to clone it first and then re-run `/ai-ready-setup`.
@@ -33,14 +35,42 @@ Delegates to `setup.sh` in the bootstrap repo. Do not reimplement the setup logi
 
 ## Step 1 — Locate the bootstrap repo
 
-```bash
-REPO_DIR=~/Desktop/ai/paridas-bootstrap
+Use `git rev-parse` first — if this skill is running from within the repo, the path is already known.
+Fall back to searching common locations so OneDrive Desktop, non-standard paths, and all platforms
+are handled correctly without hardcoding `~/Desktop`.
 
-if [ ! -d "$REPO_DIR" ]; then
-  echo "Bootstrap repo not found at $REPO_DIR"
-  echo "Clone it first: git clone https://github.com/vmohapatra/paridas-bootstrap $REPO_DIR"
+```bash
+# Primary: running from inside the repo
+REPO_DIR=$(git rev-parse --show-toplevel 2>/dev/null)
+
+if [ -z "$REPO_DIR" ] || [ "$(basename "$REPO_DIR")" != "paridas-bootstrap" ]; then
+  # Search common locations (covers OneDrive Desktop, local Desktop, etc.)
+  OS_TYPE=$(uname -s 2>/dev/null || echo Windows)
+  SEARCH_PATHS="$HOME/Desktop $HOME/OneDrive/Desktop $HOME/Documents $HOME/Dev $HOME/workspace $HOME/code"
+
+  case "$OS_TYPE" in
+    MINGW*|MSYS*|CYGWIN*)
+      for p in /c/Users/*/OneDrive/Desktop /c/Users/*/Desktop; do
+        [ -d "$p" ] && SEARCH_PATHS="$SEARCH_PATHS $p"
+      done ;;
+    Linux)
+      if grep -qi microsoft /proc/version 2>/dev/null; then
+        for p in /mnt/c/Users/*/OneDrive/Desktop /mnt/c/Users/*/Desktop; do
+          [ -d "$p" ] && SEARCH_PATHS="$SEARCH_PATHS $p"
+        done
+      fi ;;
+  esac
+
+  REPO_DIR=$(find $SEARCH_PATHS -maxdepth 3 -type d -name "paridas-bootstrap" 2>/dev/null | head -1)
+fi
+
+if [ -z "$REPO_DIR" ]; then
+  echo "Bootstrap repo not found. Clone it first:"
+  echo "  git clone https://github.com/vmohapatra/paridas-bootstrap <path>/paridas-bootstrap"
   exit 1
 fi
+
+echo "Repo found at: $REPO_DIR"
 ```
 
 ---
@@ -64,10 +94,10 @@ chmod +x setup.sh
 
 `setup.sh` will first display the data use notice from `CONSENT.md` — the user presses Enter to accept or Ctrl+C to exit. Then it handles everything:
 - OS detection and AI_BASE resolution
-- Directory structure creation under `~/Desktop/ai/<yourname>/`
+- Directory structure creation under `$AI_BASE/<yourname>/` (sibling to the repo)
 - PERSONA, MEMORY, and CLAUDE.md file creation from templates
 - `.bootstrap-source` marker written with repo origin and version
-- Standalone `~/Desktop/ai/sync.sh` launcher installed
+- Standalone `$AI_BASE/sync.sh` launcher installed
 - Claude Code skill installation (skipped — already running)
 - Persona creation kickoff (if Claude Code detected — it is, since this skill is running)
 
@@ -78,7 +108,7 @@ chmod +x setup.sh
 After `setup.sh` completes, confirm:
 
 ```
-Workspace created at ~/Desktop/ai/<yourname>/
+Workspace created at $AI_BASE/<yourname>/   (sibling to paridas-bootstrap/)
 
   ├── PERSONA_<yourname>_GLOBAL.md    ← fill in your communication style
   ├── MEMORY_<yourname>_GLOBAL.md     ← replace [placeholders] with your values
@@ -92,7 +122,7 @@ Workspace created at ~/Desktop/ai/<yourname>/
   └── evolution/
 
 ~/.claude/CLAUDE.md                   ← review [CUSTOMIZE] sections for your stack
-~/Desktop/ai/sync.sh                  ← run this any time to keep your workspace current
+$AI_BASE/sync.sh                      ← run this any time to keep your workspace current
 ```
 
 ---
@@ -102,11 +132,11 @@ Workspace created at ~/Desktop/ai/<yourname>/
 After initial setup, the user keeps their workspace current with two commands:
 
 ```bash
-# 1. Pull latest bootstrap from GitHub
-cd ~/Desktop/ai/paridas-bootstrap && ./update.sh
+# 1. Pull latest bootstrap from GitHub (from wherever you cloned it)
+cd "$REPO_DIR" && ./update.sh
 
 # 2. Sync updated files into workspace
-~/Desktop/ai/sync.sh <yourname>
+"$(dirname "$REPO_DIR")/sync.sh" <yourname>
 ```
 
 The standalone `sync.sh` launcher works even if the bootstrap repo is later deleted —
