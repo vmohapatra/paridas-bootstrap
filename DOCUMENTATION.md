@@ -35,13 +35,15 @@ vijayaa/
 │   └── astrologer/
 │       └── PLAN_astrologer.md                      ← ongoing plan (patterns + approach)
 ├── projects/                   ← deliverables — docs, HTML, analysis outputs
-│   ├── debate-coach/
+│   ├── debate-coach/           ← topic plan: subfolder per topic
 │   │   └── box-lunches-vs-school-lunches/
 │   │       ├── DEBATE_TOPIC-BRIEF_box-lunches-vs-school-lunches.md
 │   │       └── DEBATE_SCRIPT-FEEDBACK_box-lunches-vs-school-lunches.md
-│   └── astrology/
-│       ├── ASTROLOGY_PREDICTIONS_rakesh-2026.md
-│       └── ASTROLOGY_READING_family-april-2026.md
+│   ├── astrology/              ← ongoing plan: deliverables directly in folder
+│   │   ├── ASTROLOGY_PREDICTIONS_rakesh-2026.md
+│   │   └── ASTROLOGY_READING_family-april-2026.md
+│   └── chess-coach/            ← ongoing plan: deliverables directly in folder
+│       └── chess.html
 ├── trackers/                   ← progress tracking against goals
 ├── learnings/                  ← what you captured after completing goals
 ├── evolution/                  ← how your personas changed over time

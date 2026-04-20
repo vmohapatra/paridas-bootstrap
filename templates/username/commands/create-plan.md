@@ -8,16 +8,23 @@ Start an activity log for a goal and create the project folder for its deliverab
 
 | Type | When | Plan path | Project path |
 |------|------|-----------|--------------|
-| **Topic** | One-off goal with a clear deliverable | `plans/<persona>/PLAN_<topic>.md` | `projects/<persona>/<topic>/` |
-| **Ongoing** | Recurring persona work (no single topic) | `plans/<persona>/PLAN_<persona>.md` | `projects/<subject-area>/` |
+| **Topic** | One-off goal with a specific deliverable | `plans/<persona>/PLAN_<topic>.md` | `projects/<persona>/<topic>/` |
+| **Ongoing** | Recurring persona work across sessions | `plans/<persona>/PLAN_<persona>.md` | `projects/<persona>/` |
 
 **Topic example:** Debate Coach preparing for "box lunches vs school lunches"
 - Plan: `plans/debate-coach/PLAN_box-lunches-vs-school-lunches.md`
 - Project: `projects/debate-coach/box-lunches-vs-school-lunches/`
+- Deliverables in subfolder: `DEBATE_TOPIC-BRIEF_box-lunches.md`, `DEBATE_SCRIPT-FEEDBACK_box-lunches.md`
 
-**Ongoing example:** Astrologer working across multiple readings over time
+**Ongoing example — Astrologer:** readings and predictions built up over time
 - Plan: `plans/astrologer/PLAN_astrologer.md`
 - Project: `projects/astrology/`
+- Deliverables directly in folder: `ASTROLOGY_PREDICTIONS_rakesh-2026.md`, `ASTROLOGY_READING_family-april-2026.md`
+
+**Ongoing example — Chess Coach:** tools and resources built for a student
+- Plan: `plans/chess-coach/PLAN_chess-coach.md`
+- Project: `projects/chess-coach/`
+- Deliverables directly in folder: `chess.html`, `CHESS_DRILL_openings.md`
 
 ---
 
@@ -100,10 +107,10 @@ Updated as new patterns emerge — not a step-by-step log.]
 
 Create immediately when the plan starts.
 
-- **Topic:** `~/Desktop/ai/<yourname>/projects/<persona-slug>/<topic-slug>/`
-- **Ongoing:** `~/Desktop/ai/<yourname>/projects/<subject-area>/`
+- **Topic:** `~/Desktop/ai/<yourname>/projects/<persona-slug>/<topic-slug>/` — subfolder per topic
+- **Ongoing:** `~/Desktop/ai/<yourname>/projects/<persona-slug>/` — deliverables directly in folder
 
-All deliverables for this goal go here — docs, HTML, analysis files, prediction records.
+All deliverables go here — docs, HTML, analysis files, prediction records.
 Never save deliverables directly to `plans/`.
 
 ---
