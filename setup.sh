@@ -110,6 +110,14 @@ mkdir -p ~/.claude
 if [ ! -f "$CLAUDE_DST" ]; then
   sed "s/<yourname>/$YOURNAME/g" "$CLAUDE_SRC" > "$CLAUDE_DST"
   echo "  [ok] ~/.claude/CLAUDE.md created"
+elif command -v claude &>/dev/null; then
+  if ! grep -qF "$(head -3 "$CLAUDE_SRC" | tail -1)" "$CLAUDE_DST"; then
+    echo "" >> "$CLAUDE_DST"
+    sed "s/<yourname>/$YOURNAME/g" "$CLAUDE_SRC" >> "$CLAUDE_DST"
+    echo "  [ok] ~/.claude/CLAUDE.md updated with bootstrap template"
+  else
+    echo "  [skip] ~/.claude/CLAUDE.md already contains bootstrap template"
+  fi
 else
   echo "  [skip] ~/.claude/CLAUDE.md already exists — review $CLAUDE_SRC manually and merge what you need"
 fi
@@ -167,20 +175,6 @@ echo ""
 if ! command -v claude &>/dev/null; then
   echo "Next step: install Claude Code — https://claude.ai/code"
   echo ""
-fi
-
-# ─── append skill to CLAUDE.md (if Claude Code is installed) ─────────────────
-if command -v claude &>/dev/null; then
-  SKILL_MD="$REPO_DIR/claude-code/skills/ai-ready-setup/SKILL.md"
-  if [ -f "$SKILL_MD" ] && [ -f "$CLAUDE_DST" ]; then
-    if ! grep -q "ai-ready-setup" "$CLAUDE_DST"; then
-      echo "" >> "$CLAUDE_DST"
-      cat "$SKILL_MD" >> "$CLAUDE_DST"
-      echo "  [ok] ai-ready-setup skill appended to $CLAUDE_DST"
-    else
-      echo "  [skip] ai-ready-setup already in $CLAUDE_DST"
-    fi
-  fi
 fi
 
 # ─── persona kickoff (if Claude Code is installed) ────────────────────────────
