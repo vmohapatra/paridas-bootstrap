@@ -1,96 +1,159 @@
 # paridas-bootstrap
 
-A personal AI workspace bootstrap — get a consistent, structured working environment
+A portable AI workspace bootstrap — get a consistent, structured working environment
 on any device in minutes.
 
 ---
 
 ## What this repo is
 
-`paridas-bootstrap` is a portable setup kit that creates your personal AI workspace
-under `~/Desktop/ai/<yourname>/`. It provisions the directory layout, starter persona
-and memory files, and a global `~/.claude/CLAUDE.md` so Claude Code (and other AI
-tools) have consistent context about who you are and how you work — no matter which
-machine you're on.
+`paridas-bootstrap` provisions your personal AI workspace under `~/Desktop/ai/<yourname>/`.
+It creates the directory layout, starter persona and memory files, a global `~/.claude/CLAUDE.md`,
+and a library of commands and persona examples that Claude Code uses to maintain consistent
+context about who you are and how you work — across every machine and every session.
+
+Once set up, your workspace compounds over time: personas sharpen, plans and trackers capture
+execution, learnings accumulate, and a global persona evolves from the roles you actually use.
 
 ---
 
-## Setup paths
+## How it works
 
-### Option A — shell script (no Claude Code required)
+```
+Clone bootstrap repo
+        ↓
+  ./setup.sh <name>          Creates workspace, writes sync launcher, kicks off persona creation
+        ↓
+  ~/Desktop/ai/sync.sh       Standalone launcher — keeps workspace current even if bootstrap repo is gone
+        ↓
+  Bootstrap pulls from GitHub → syncs files into workspace → creates workspace if missing
+```
 
-Works on macOS, Windows (Git Bash), WSL, and Linux.
+**Three scripts, three jobs:**
+
+| Script | Job |
+|--------|-----|
+| `setup.sh` | One-time workspace creation |
+| `update.sh` | Keep the bootstrap repo current with GitHub |
+| `sync.sh` | Keep your workspace current with the bootstrap repo |
+
+---
+
+## First-time setup
 
 ```bash
-git clone <this-repo> ~/Desktop/ai/paridas-bootstrap
+git clone https://github.com/vmohapatra/paridas-bootstrap ~/Desktop/ai/paridas-bootstrap
 cd ~/Desktop/ai/paridas-bootstrap
 chmod +x setup.sh
 ./setup.sh <yourname>
 ```
 
-Replace `<yourname>` with the name you want for your workspace folder
-(e.g. `vijayaa`, `rparida`).
+Replace `<yourname>` with the name you want for your workspace folder (e.g. `vijayaa`, `rparida`).
 
-### Option B — Claude Code skill
+**What setup does:**
+1. Creates `~/Desktop/ai/<yourname>/` with the full directory structure
+2. Copies and personalises PERSONA, MEMORY, and CLAUDE.md starter files
+3. Writes a `.bootstrap-source` marker recording the repo origin and version
+4. Installs a standalone `~/Desktop/ai/sync.sh` launcher (works even if the bootstrap repo is later deleted)
+5. Installs the `ai-ready-setup` Claude Code skill if Claude Code is present
+6. If Claude Code is installed — prompts for your first role and launches the persona creation workflow
 
-If you already have Claude Code installed:
-1. Copy `claude-code/skills/ai-ready-setup/` to `~/.claude/skills/`
-2. Open a Claude Code session in any repo
-3. Run: `/ai-ready-setup`
+---
+
+## Keeping everything current
+
+### Update the bootstrap repo
+
+```bash
+cd ~/Desktop/ai/paridas-bootstrap
+./update.sh
+```
+
+Checks the remote VERSION, shows what commits have landed, and pulls on confirmation.
+
+### Sync your workspace
+
+```bash
+~/Desktop/ai/sync.sh <yourname>
+```
+
+Copies all bootstrap-managed files (commands, persona examples, learning guides) into your workspace.
+Your custom files — additional commands, personas you've built, plans, trackers — are never touched.
+Your workspace is always a superset of what bootstrap provides.
+
+**If the bootstrap repo is deleted locally:** the standalone launcher re-clones it automatically before syncing.
+
+**If your workspace doesn't exist yet:** sync runs setup first, then syncs.
 
 ---
 
 ## What gets created
 
-Running either setup path produces:
-
 ```
 ~/Desktop/ai/
+├── sync.sh                             ← standalone sync launcher (created by setup.sh)
 ├── learning-guides/
 │   ├── Claude-AI-Learning-Guide.md
 │   ├── Claude-Professional-OS-Guide.md
 │   └── Cursor-AI-Learning-Guide.md
 └── <yourname>/
-    ├── PERSONA_<yourname>_GLOBAL.md    ← fill in your communication style
-    ├── MEMORY_<yourname>_GLOBAL.md     ← session memory + command reference
+    ├── .bootstrap-source               ← repo origin, version, setup date
+    ├── .bootstrap-version              ← last synced bootstrap version
+    ├── PERSONA_<yourname>_GLOBAL.md    ← your global persona (fill in)
+    ├── MEMORY_<yourname>_GLOBAL.md     ← session memory + file map (fill in)
     ├── insights/                       ← AI usage insights reports
-    ├── learnings/                      ← personal case library
-    ├── personas/                       ← role-based personas Claude can embody
+    ├── learnings/                      ← session and goal learnings
+    ├── personas/                       ← role-based personas
     ├── plans/                          ← implementation and strategy plans
-    ├── commands/                       ← custom commands built over time
+    ├── commands/                       ← commands (bootstrap + your own)
     ├── trackers/                       ← sprint, goal, and metric trackers
     └── evolution/                      ← persona change history over time
+
 ~/.claude/
 └── CLAUDE.md                           ← global Claude Code instructions
 ```
 
 ---
 
-## After Setup
+## Commands
 
-### 1. Fill in your persona file
-Open `~/Desktop/ai/<yourname>/PERSONA_<yourname>_GLOBAL.md` and fill in:
-- Your communication style and tone
-- How you review PRs and what you flag
-- Your strengths and recurring gaps
-- Your current professional focus
+All commands live in `commands/` and are invoked inside a Claude Code session with `/command-name`.
 
-### 2. Personalise your memory file
-Open `~/Desktop/ai/<yourname>/MEMORY_<yourname>_GLOBAL.md` and:
-- Add your active projects and repos
-- List key colleagues and link their persona files
-- Replace all `[placeholder]` values
+| Command | What it does |
+|---------|-------------|
+| `/create-persona` | Structured Q&A intake → writes a role-based persona file |
+| `/create-plan` | Intake → generates a phased plan file in `plans/` |
+| `/create-tracker` | Reads a plan → generates a matching tracker in `trackers/` |
+| `/articulate` | Takes rough input → produces short + full clean written versions |
+| `/visualize-evolution` | Reads trackers and evolution files → generates an HTML progress dashboard |
+| `/evolve-global-persona` | Reads all role personas → proposes updates to your global persona |
 
-### 3. Review `~/.claude/CLAUDE.md`
-Sections marked `[CUSTOMIZE]` need your values:
-- Your build tool and lint commands
-- Priority persona files to load at session start
+### The persona lifecycle
 
-### 4. Start using Claude Code
-Each session Claude will:
-- Auto-load your memory and persona files
-- Apply your communication style to all output
-- Prompt you at session end to capture learnings
+```
+/create-persona          Build a role-based persona (Debate Coach, Budget Planner, etc.)
+        ↓
+/create-plan             Plan a goal using that persona
+        ↓
+/create-tracker          Track execution against the plan
+        ↓
+  tracker complete       Learnings file created → persona updates proposed → evolution file updated
+        ↓
+/evolve-global-persona   Cross-cutting patterns from all role personas → global persona sharpened
+```
+
+---
+
+## Persona examples
+
+Two worked examples are shipped and synced into your `personas/` folder:
+
+| File | What it demonstrates |
+|------|---------------------|
+| `PERSONA_DEBATE-COACH.md` | Elementary school debate coaching — EALI structure, topic briefs, script feedback, evidence banks |
+| `PERSONA_MANDARIN-TEACHER.md` | Early childhood Mandarin — tone-first sequence, spaced repetition, HSK 1 milestone |
+
+These show the full persona structure: framework, output types, failure modes, reference banks, and sample invocations.
 
 ---
 
@@ -98,15 +161,17 @@ Each session Claude will:
 
 | File | Purpose |
 |------|---------|
-| `templates/PERSONA_USERNAME_GLOBAL.md` | Communication voice, working style, reviewer patterns |
-| `templates/MEMORY_USERNAME_GLOBAL.md` | Session memory, file map, custom commands, CLAUDE.md starter |
+| `templates/PERSONA_USERNAME_GLOBAL.md` | Global persona starter — communication voice, working style, reviewer patterns |
+| `templates/MEMORY_USERNAME_GLOBAL.md` | Session memory starter — file map, active projects, key people, custom commands |
 | `templates/CLAUDE.md` | Standalone CLAUDE.md starter — copy to `~/.claude/CLAUDE.md` |
-| `templates/username/` | Empty directory scaffold with `.gitkeep` |
-| `templates/username/commands/create-persona.md` | Command: intake → write a role-based persona via structured Q&A |
-| `templates/username/commands/create-plan.md` | Command: intake → generate a phased plan file in `plans/` |
-| `templates/username/commands/create-tracker.md` | Command: read a plan → generate a matching tracker in `trackers/` |
-| `templates/username/commands/articulate.md` | Command: rough input → short + full clean written version |
-| `templates/username/commands/visualize-evolution.md` | Command: generate HTML dashboard from trackers and evolution files |
+| `templates/sync-launcher.sh` | Source for the standalone sync launcher written to `~/Desktop/ai/sync.sh` |
+| `templates/username/commands/` | All command files (synced to your `commands/` folder) |
+| `templates/username/personas/examples/` | Worked persona examples (synced to your `personas/` folder) |
+| `templates/username/plans/SAMPLE-plan.md` | Plan file structure reference |
+| `templates/username/trackers/SAMPLE-tracker.md` | Tracker file structure reference |
+| `templates/username/learnings/SAMPLE-learning-debrief.md` | Learnings file structure reference |
+| `templates/username/evolution/SAMPLE-EVOLUTION_ROLE.md` | Evolution file structure reference |
+| `templates/username/insights/SAMPLE-insights-report.md` | Insights report structure reference |
 
 ---
 
@@ -114,68 +179,80 @@ Each session Claude will:
 
 | Platform | Setup method |
 |----------|-------------|
-| macOS | `./setup.sh` or `/ai-ready-setup` skill |
+| macOS | `./setup.sh` |
 | Windows (Git Bash) | `./setup.sh` |
 | WSL (Ubuntu/Debian) | `./setup.sh` |
 | Linux | `./setup.sh` |
 
 ---
 
-## Updating
+## Versioning
 
-Run the updater to check for and pull the latest version:
+The repo uses semantic versioning in `VERSION`. The current version is `0.0.1-SNAPSHOT` (beta).
 
-```bash
-cd ~/Desktop/ai/paridas-bootstrap
-./update.sh
-```
+Every PR must include a version bump — the GitHub Actions workflow reads the checked bump type
+(patch / minor / major / none) from the PR body and automatically increments `VERSION` and
+updates `CHANGELOG.md` in the branch before merge.
 
-The updater will:
-1. Show the local and remote version
-2. List commits that have landed since your version
-3. Ask for confirmation before pulling
-4. Leave your workspace files (`~/Desktop/ai/<yourname>/`) untouched
-
-After updating the bootstrap repo, sync your workspace to pick up new templates and commands:
-
-```bash
-./sync.sh <yourname>
-```
-
-`sync.sh` copies all bootstrap-managed files (commands, persona examples, learning guides) into your workspace. Your custom files — additional commands, personal personas, plans, trackers — are never touched. Your workspace always ends up as a superset of what bootstrap provides.
 ---
 
-## Repo Structure
+## Contributing
+
+All changes go via a branch and PR — direct pushes to main are blocked.
+
+When opening a PR, the template will prompt for:
+- **Description** — why this change is being made
+- **Summary** — what it does
+- **What Changed** — files and specifics
+- **Version Bump** — patch / minor / major / none
+
+The version bump workflow runs automatically and commits the updated `VERSION` and `CHANGELOG.md` to the branch.
+
+---
+
+## Repo structure
+
 ```
 paridas-bootstrap/
-├── README.md                       ← you are here
-├── setup.sh                        ← cross-platform bootstrap script
+├── README.md
+├── CHANGELOG.md
+├── VERSION
+├── setup.sh                            ← one-time workspace creation
+├── update.sh                           ← keep bootstrap repo current with GitHub
+├── sync.sh                             ← keep workspace current with bootstrap repo
 ├── .gitignore
-├── learning-guides/                ← guides shipped with the repo
+├── .github/
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── workflows/
+│       └── version-bump.yml            ← auto version bump + changelog on PR
+├── learning-guides/
 │   ├── Claude-AI-Learning-Guide.md
 │   ├── Claude-Professional-OS-Guide.md
 │   └── Cursor-AI-Learning-Guide.md
 ├── templates/
 │   ├── PERSONA_USERNAME_GLOBAL.md
 │   ├── MEMORY_USERNAME_GLOBAL.md
-│   ├── CLAUDE.md                   ← standalone CLAUDE.md starter
-│   └── username/                   ← scaffold synced into user workspace
-│       ├── commands/               ← all commands (synced by sync.sh)
+│   ├── CLAUDE.md
+│   ├── sync-launcher.sh                ← source for ~/Desktop/ai/sync.sh
+│   └── username/                       ← synced into user workspace by sync.sh
+│       ├── commands/
 │       │   ├── create-persona.md
 │       │   ├── create-plan.md
 │       │   ├── create-tracker.md
 │       │   ├── articulate.md
-│       │   └── visualize-evolution.md
+│       │   ├── visualize-evolution.md
+│       │   └── evolve-global-persona.md
 │       ├── personas/
-│       │   └── examples/           ← worked persona examples (synced to personas/)
-│       ├── insights/.gitkeep
-│       ├── learnings/.gitkeep
-│       ├── plans/.gitkeep
-│       ├── trackers/.gitkeep
-│       └── evolution/.gitkeep
+│       │   └── examples/
+│       │       ├── PERSONA_DEBATE-COACH.md
+│       │       └── PERSONA_MANDARIN-TEACHER.md
+│       ├── plans/SAMPLE-plan.md
+│       ├── trackers/SAMPLE-tracker.md
+│       ├── learnings/SAMPLE-learning-debrief.md
+│       ├── evolution/SAMPLE-EVOLUTION_ROLE.md
+│       └── insights/SAMPLE-insights-report.md
 └── claude-code/
     └── skills/
         └── ai-ready-setup/
-            └── SKILL.md            ← Claude Code skill
+            └── SKILL.md
 ```
-
