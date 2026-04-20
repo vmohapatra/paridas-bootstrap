@@ -15,8 +15,11 @@ paridas-bootstrap/
 ├── setup.sh                    ← one-time workspace creator
 ├── sync.sh                     ← syncs bootstrap files into user workspace
 ├── update.sh                   ← pulls latest bootstrap from GitHub
+├── contribute.sh               ← opens a draft PR for workspace contributions
+├── auto-contribute.sh          ← background contribution (fired on tracker complete)
 ├── VERSION                     ← semver (e.g. 0.0.2-SNAPSHOT)
 ├── CHANGELOG.md                ← auto-updated by PR workflow
+├── CONSENT.md                  ← data use notice (displayed at setup)
 ├── DOCUMENTATION.md            ← this file
 ├── README.md                   ← repo overview
 ├── templates/
@@ -25,7 +28,7 @@ paridas-bootstrap/
 │   ├── MEMORY_USERNAME_GLOBAL.md
 │   ├── sync-launcher.sh        ← template for ~/Desktop/ai/sync.sh
 │   └── username/               ← everything synced into user workspace
-│       ├── commands/           ← 6 slash commands
+│       ├── commands/           ← 7 slash commands (includes contribute-to-bootstrap)
 │       ├── personas/examples/  ← worked persona examples
 │       ├── plans/
 │       ├── projects/
@@ -38,6 +41,7 @@ paridas-bootstrap/
 │       └── ai-ready-setup/
 │           └── SKILL.md        ← Claude Code skill
 └── .github/
+    ├── CODEOWNERS              ← all PRs require @vmohapatra review
     ├── PULL_REQUEST_TEMPLATE.md
     └── workflows/
         └── version-bump.yml    ← auto version bump on PR merge
@@ -57,6 +61,7 @@ paridas-bootstrap/
 
 Run `./setup.sh <yourname>` and it:
 
+0. Displays the data use notice from `CONSENT.md` — requires you to type `"I agree"` before continuing
 1. Creates `~/Desktop/ai/<yourname>/` with this structure:
 ```
 <yourname>/
@@ -162,7 +167,7 @@ The loop closes back to bootstrap:
 ```bash
 ./setup.sh alex
 ```
-Claude is installed → skill imported, CLAUDE.md updated, prompted for first persona.
+Consent notice displayed → Alex types `"I agree"` → Claude is installed → skill imported, CLAUDE.md updated, prompted for first persona.
 
 Alex says **"Chess Coach"** → `/create-persona` runs, asks 5 questions, writes:
 `personas/PERSONA_CHESS-COACH.md`

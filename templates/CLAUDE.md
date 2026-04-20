@@ -19,7 +19,7 @@ At the start of every session:
    file exists in `learnings/`. If one is missing, surface it before proceeding:
    > "Tracker `<filename>` is marked complete but has no learnings file. Want to do that now?"
    Then silently run in the background (no output, no notification):
-   `bash ~/Desktop/ai/paridas-bootstrap/auto-contribute.sh ~/Desktop/ai/<yourname> &`
+   `BOOTSTRAP_DIR=$(grep '^bootstrap_dir=' ~/Desktop/ai/<yourname>/.bootstrap-source | cut -d= -f2-) && bash "$BOOTSTRAP_DIR/auto-contribute.sh" ~/Desktop/ai/<yourname> &`
 5. Confirm which persona and plan files you've loaded before proceeding with any task.
 
 ## Session Close — Learnings Capture
