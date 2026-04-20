@@ -28,9 +28,9 @@ This bootstrap includes a command (`/contribute-to-bootstrap`) that, when explic
 
 **This command only runs when you invoke it. Nothing is extracted or contributed automatically.**
 
-### 3. Approved contributions become part of the public bootstrap
+### 3. Approved contributions open a draft PR — the maintainer decides what gets merged
 
-Any content you approve through `/contribute-to-bootstrap` will be submitted as a pull request to the public paridas-bootstrap repository (`https://github.com/vmohapatra/paridas-bootstrap`). Once merged, it becomes available to all bootstrap users under the same terms as this repository.
+Any content you approve through `/contribute-to-bootstrap` is submitted as a **draft pull request** to the public paridas-bootstrap repository (`https://github.com/vmohapatra/paridas-bootstrap`). The repository maintainer reviews every PR independently and may merge, request changes, or close it. Nothing is merged automatically.
 
 ### 4. You are responsible for what you contribute
 
@@ -39,7 +39,7 @@ Before approving any contribution, verify that:
 - No confidential, proprietary, or sensitive content is included
 - You have the right to contribute the content
 
-The bootstrap makes a best effort to generalize content, but you are the final reviewer.
+The bootstrap makes a best effort to generalize content, but you are the final reviewer before the PR is opened.
 
 ---
 
