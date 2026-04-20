@@ -1,0 +1,120 @@
+name: Auto Version Bump
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+permissions:
+  contents: write
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Detect bump type from PR body
+        id: detect
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if echo "$PR_BODY" | grep -q '^\- \[x\] `patch`'; then
+            echo "bump=patch" >> $GITHUB_OUTPUT
+          elif echo "$PR_BODY" | grep -q '^\- \[x\] `minor`'; then
+            echo "bump=minor" >> $GITHUB_OUTPUT
+          elif echo "$PR_BODY" | grep -q '^\- \[x\] `major`'; then
+            echo "bump=major" >> $GITHUB_OUTPUT
+          else
+            echo "bump=none" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check if already bumped
+        id: check
+        if: steps.detect.outputs.bump != 'none'
+        run: |
+          BASE_VERSION=$(git show origin/${{ github.base_ref }}:VERSION | tr -d '[:space:]')
+          CURRENT_VERSION=$(cat VERSION | tr -d '[:space:]')
+          if [ "$BASE_VERSION" != "$CURRENT_VERSION" ]; then
+            echo "Version already bumped in this PR ($CURRENT_VERSION). Skipping."
+            echo "already_bumped=true" >> $GITHUB_OUTPUT
+          else
+            echo "already_bumped=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Bump VERSION
+        if: steps.detect.outputs.bump != 'none' && steps.check.outputs.already_bumped == 'false'
+        env:
+          BUMP: ${{ steps.detect.outputs.bump }}
+        run: |
+          CURRENT=$(cat VERSION | tr -d '[:space:]')
+          # Strip any suffix like -SNAPSHOT
+          BASE=$(echo "$CURRENT" | sed 's/-.*//')
+          MAJOR=$(echo "$BASE" | cut -d. -f1)
+          MINOR=$(echo "$BASE" | cut -d. -f2)
+          PATCH=$(echo "$BASE" | cut -d. -f3)
+
+          if [ "$BUMP" = "major" ]; then
+            MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0
+          elif [ "$BUMP" = "minor" ]; then
+            MINOR=$((MINOR + 1)); PATCH=0
+          elif [ "$BUMP" = "patch" ]; then
+            PATCH=$((PATCH + 1))
+          fi
+
+          NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+          # Preserve suffix if present (e.g. -SNAPSHOT)
+          SUFFIX=$(echo "$CURRENT" | grep -o '\-.*' || true)
+          echo "${NEW_VERSION}${SUFFIX}" > VERSION
+          echo "Bumped $CURRENT → ${NEW_VERSION}${SUFFIX}"
+
+      - name: Update CHANGELOG
+        if: steps.detect.outputs.bump != 'none' && steps.check.outputs.already_bumped == 'false'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          NEW_VERSION=$(cat VERSION | tr -d '[:space:]')
+          TODAY=$(date +%Y-%m-%d)
+
+          # Extract Description section from PR body
+          DESCRIPTION=$(echo "$PR_BODY" | awk '/^## Description/{found=1; next} found && /^---/{exit} found{print}' | sed '/^<!--/d; /^$/d' | head -5)
+
+          # Extract Summary section from PR body
+          SUMMARY=$(echo "$PR_BODY" | awk '/^## Summary/{found=1; next} found && /^---/{exit} found{print}' | sed '/^<!--/d; /^$/d' | head -3)
+
+          # Extract What Changed bullets from PR body
+          CHANGED=$(echo "$PR_BODY" | awk '/^## What Changed/{found=1; next} found && /^---/{exit} found && /^- /{print}' | head -10)
+
+          # Build new changelog entry
+          ENTRY="## [$NEW_VERSION] - $TODAY\n\n"
+          ENTRY="${ENTRY}**$PR_TITLE**\n\n"
+          if [ -n "$DESCRIPTION" ]; then
+            ENTRY="${ENTRY}${DESCRIPTION}\n\n"
+          fi
+          if [ -n "$SUMMARY" ]; then
+            ENTRY="${ENTRY}${SUMMARY}\n\n"
+          fi
+          if [ -n "$CHANGED" ]; then
+            ENTRY="${ENTRY}### Changed\n${CHANGED}\n"
+          fi
+          ENTRY="${ENTRY}\n---\n"
+
+          # Prepend entry after the header (after the first ---)
+          awk -v entry="$ENTRY" '
+            /^---$/ && !done { print; printf "\n" entry; done=1; next }
+            { print }
+          ' CHANGELOG.md > CHANGELOG.tmp && mv CHANGELOG.tmp CHANGELOG.md
+
+      - name: Commit updated VERSION and CHANGELOG
+        if: steps.detect.outputs.bump != 'none' && steps.check.outputs.already_bumped == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add VERSION CHANGELOG.md
+          git diff --cached --quiet || git commit -m "chore: bump version to $(cat VERSION) and update changelog [auto]"
+          git push
