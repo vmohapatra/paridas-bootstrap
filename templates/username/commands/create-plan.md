@@ -1,117 +1,158 @@
 # Create Plan
 
-Generate a structured plan tied to an active persona and a specific goal.
+Start an activity log for a goal and create the project folder for its deliverables.
+
+---
+
+## Two plan types
+
+| Type | When | Plan path | Project path |
+|------|------|-----------|--------------|
+| **Topic** | One-off goal with a specific deliverable | `plans/<persona>/PLAN_<topic>.md` | `projects/<persona>/<topic>/` |
+| **Ongoing** | Recurring persona work across sessions | `plans/<persona>/PLAN_<persona>.md` | `projects/<persona>/` |
+
+**Topic example:** Debate Coach preparing for "box lunches vs school lunches"
+- Plan: `plans/debate-coach/PLAN_box-lunches-vs-school-lunches.md`
+- Project: `projects/debate-coach/box-lunches-vs-school-lunches/`
+- Deliverables in subfolder: `DEBATE_TOPIC-BRIEF_box-lunches.md`, `DEBATE_SCRIPT-FEEDBACK_box-lunches.md`
+
+**Ongoing example — Astrologer:** readings and predictions built up over time
+- Plan: `plans/astrologer/PLAN_astrologer.md`
+- Project: `projects/astrology/`
+- Deliverables directly in folder: `ASTROLOGY_PREDICTIONS_rakesh-2026.md`, `ASTROLOGY_READING_family-april-2026.md`
+
+**Ongoing example — Chess Coach:** tools and resources built for a student
+- Plan: `plans/chess-coach/PLAN_chess-coach.md`
+- Project: `projects/chess-coach/`
+- Deliverables directly in folder: `chess.html`, `CHESS_DRILL_openings.md`
 
 ---
 
 ## When to Use
 
-Invoke with `"Create a plan for: [topic/goal]"` or `"Generate plan: [topic/goal]"` when you have:
-- A new topic or goal to prepare for under an active persona
-- A task that needs phases, actions, and success criteria before work starts
-
----
-
-## How It Works
-
-Uses the active persona from session context and the global persona at
-`~/Desktop/ai/<yourname>/PERSONA_<yourname>_GLOBAL.md`.
-No need to re-specify the persona — it is already loaded.
+Invoke with `"Create a plan for: [topic/goal]"` or `"Start plan: [topic/goal]"`.
 
 ---
 
 ## Intake — One Question at a Time
 
-Ask these questions one at a time. Wait for each answer before asking the next.
-
 **Q1. Which persona is driving this plan?**
 Detect from session context first. If unclear, ask:
-> "Which persona should this plan use? e.g. Debate Coach, Mandarin Teacher — or leave blank to use the global persona."
+> "Which persona should this plan use? e.g. Debate Coach, Astrologer, Budget Planner"
 
-**Q2. What is the specific goal or topic?**
-> Be specific — vague goals produce vague plans.
+**Q2. Is this for a specific topic, or ongoing work for this persona?**
+> "Is this for a specific topic (e.g. a debate topic, a budget month), or ongoing work
+> you'll keep adding to over time (e.g. astrology readings, language lessons)?"
 
-**Q3. What is the target date or deadline?**
-> If none, note it in the plan and flag it as a risk.
+**Q3. (Topic only) What is the specific topic?**
+Skip if ongoing.
 
 ---
 
-## Output Structure
+## Plan log format — Topic
+
+Save to: `~/Desktop/ai/<yourname>/plans/<persona-slug>/PLAN_<topic-slug>.md`
 
 ```
-# Plan: [Goal or Topic]
+# Plan: [Topic]
 
-**Persona:** [active persona]
-**Goal:** [specific outcome]
+**Persona:** [persona name]
+**Topic:** [specific topic]
 **Started:** [today's date]
-**Target:** [deadline or "ongoing"]
-**Status:** not-started
+**Status:** in-progress | complete
+**Project folder:** `projects/<persona-slug>/<topic-slug>/`
 
 ---
 
-## Phases
+## Session Log
 
-| Phase | Name | What it covers |
-|-------|------|----------------|
-| 1 | [phase name] | [description] |
-| 2 | [phase name] | [description] |
-
----
-
-## Phase Breakdown
-
-### Phase 1 — [Name]
-- [ ] [specific action]
-- [ ] [specific action]
-
-### Phase 2 — [Name]
-- [ ] [specific action]
-
----
-
-## Success Criteria
-- [measurable outcome]
-
----
-
-## Risks
-- [known risk and mitigation]
-
----
-*Created: [date] | Persona: [persona name]*
+| Date | Step | Deliverable |
+|------|------|-------------|
+| [today] | [first step taken] | [filename or —] |
 ```
 
 ---
 
-## Naming Convention
+## Plan log format — Ongoing
 
-Save to: `~/Desktop/ai/<yourname>/plans/`
-Filename: `[DOMAIN]_PLAN_[topic-slug].md`
+Save to: `~/Desktop/ai/<yourname>/plans/<persona-slug>/PLAN_<persona-slug>.md`
 
-Derive `[DOMAIN]` from the active persona. Use lowercase kebab-case for the slug.
+```
+# Plan: [Persona Name] — Ongoing
+
+**Persona:** [persona name]
+**Started:** [today's date]
+**Status:** active
+**Project folder:** `projects/<subject-area>/`
+
+---
+
+## Approach & Patterns
+
+[Running record of methodology, frameworks used, and patterns observed across sessions.
+Updated as new patterns emerge — not a step-by-step log.]
+
+---
+
+## Session Log
+
+| Date | Session focus | Deliverable | Pattern noted |
+|------|---------------|-------------|---------------|
+| [today] | [what this session covered] | [filename or —] | [any new pattern or approach used] |
+```
+
+---
+
+## Project folder
+
+Create immediately when the plan starts.
+
+- **Topic:** `~/Desktop/ai/<yourname>/projects/<persona-slug>/<topic-slug>/` — subfolder per topic
+- **Ongoing:** `~/Desktop/ai/<yourname>/projects/<persona-slug>/` — deliverables directly in folder
+
+All deliverables go here — docs, HTML, analysis files, prediction records.
+Never save deliverables directly to `plans/`.
+
+---
+
+## Deliverable naming
+
+`<DOMAIN>_<TYPE>_<topic-slug>.<ext>`
 
 Examples:
-- `DEBATE_PLAN_box-lunches-vs-school-lunches.md`
-- `MANDARIN_PLAN_hsk1-prep.md`
-- `BUDGET_PLAN_june-2026.md`
+- `DEBATE_TOPIC-BRIEF_box-lunches-vs-school-lunches.md`
+- `DEBATE_SCRIPT-FEEDBACK_box-lunches-vs-school-lunches.md`
+- `ASTROLOGY_PREDICTIONS_rakesh-2026.md`
+- `ASTROLOGY_READING_family-april-2026.md`
+- `BUDGET_ANALYSIS_june-2026.md`
 
 ---
 
-## After Saving
+## After saving
 
-Confirm the file path, then ask:
-> "Plan saved. Want me to create a tracker for this now?"
+Confirm both paths, then proceed:
+> "Plan log created at `plans/astrologer/PLAN_astrologer.md`
+> Project folder ready at `projects/astrology/`
+> I'll log each session and note patterns as we work."
 
-If yes — run the `create-tracker` command with this plan as the source.
+---
+
+## Updating an ongoing plan
+
+When returning to an ongoing persona in a new session:
+1. Read the existing plan — load the Approach & Patterns section
+2. Add a new row to Session Log
+3. Update Approach & Patterns if anything new was observed
 
 ---
 
 ## Rules
 
-- One question at a time — wait for each answer before proceeding
-- Derive phases from the persona's natural workflow — don't use generic phase names
-- If deadline is missing, flag it as a risk in the plan
-- If the user is unsure of phases, suggest the standard phases for that persona type
+- One question at a time — wait for each answer
+- Create the project folder immediately, even if no deliverables exist yet
+- Deliverables always go in the project folder, never in plans/
+- Topic plans: log every step as it happens
+- Ongoing plans: update patterns section when methodology evolves, not just when deliverables are created
 
 ---
 *Last updated: 2026-04-19*

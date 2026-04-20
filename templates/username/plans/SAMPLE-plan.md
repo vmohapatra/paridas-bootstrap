@@ -1,63 +1,49 @@
-# Plan: [Goal or Usecase Name]
+# Plan: [Topic] — Topic Plan
 
-**Created:** YYYY-MM-DD
-**Status:** draft | active | paused | complete
-**Goal:** [One sentence — what success looks like when this is done]
-
----
-
-## Context
-
-[Why this goal matters. What problem it solves. What triggered it.]
+**Persona:** [persona name]
+**Topic:** [specific topic]
+**Started:** YYYY-MM-DD
+**Status:** in-progress | complete
+**Project folder:** `projects/[persona-slug]/[topic-slug]/`
 
 ---
 
-## Constraints
+## Session Log
 
-- [time, resource, or scope constraint]
-- [dependency on another person or system]
-
----
-
-## Approach
-
-[Chosen strategy and why. If alternatives were considered, note them briefly and why this was selected.]
+| Date | Step | Deliverable |
+|------|------|-------------|
+| YYYY-MM-DD | Generated topic brief with pro/con breakdown | DEBATE_TOPIC-BRIEF_box-lunches-vs-school-lunches.md |
+| YYYY-MM-DD | Assessed student opening speech | DEBATE_SCRIPT-FEEDBACK_box-lunches-vs-school-lunches.md |
+| YYYY-MM-DD | Suggested rebuttal structure | — |
 
 ---
 
-## Phases
+## Notes
 
-### Phase 1 — [name]
-**Goal:** [what this phase delivers]
-**Steps:**
-- [ ] [step]
-- [ ] [step]
+[Running observations, pivots, or context that doesn't fit in the log table.]
 
-### Phase 2 — [name]
-**Goal:** [what this phase delivers]
-**Steps:**
-- [ ] [step]
-- [ ] [step]
+---
+---
+
+# Plan: [Persona Name] — Ongoing Plan
+
+**Persona:** [persona name]
+**Started:** YYYY-MM-DD
+**Status:** active
+**Project folder:** `projects/[persona-slug]/`
 
 ---
 
-## Decisions & Pivots
+## Approach & Patterns
 
-| Date | Decision | Reason |
-|------|----------|--------|
-| YYYY-MM-DD | [what was decided or changed] | [why] |
-
----
-
-## Notes & Strategies
-
-[Running notes, research, ideas, observations as the plan evolves.]
+[Running record of methodology, frameworks, and patterns observed across sessions.
+Update this when new patterns emerge — not a step-by-step log.]
 
 ---
 
-## Open Questions
+## Session Log
 
-- [ ] [question that needs an answer before proceeding]
-
----
-*Last updated: YYYY-MM-DD*
+| Date | Session focus | Deliverable | Pattern noted |
+|------|---------------|-------------|---------------|
+| YYYY-MM-DD | Built interactive board with legal move validation | chess.html | Always scaffold UI before adding game logic |
+| YYYY-MM-DD | Added opening drills for e4 and d4 | CHESS_DRILL_openings.md | — |
