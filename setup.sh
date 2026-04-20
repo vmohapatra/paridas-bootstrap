@@ -191,7 +191,7 @@ if command -v claude &>/dev/null; then
   if [ ! -f "$CLAUDE_DST" ]; then
     sed "s/<yourname>/$YOURNAME/g" "$CLAUDE_SRC" > "$CLAUDE_DST"
     echo "  [ok] ~/.claude/CLAUDE.md created"
-  elif ! grep -q "# CLAUDE.md Starter Template" "$CLAUDE_DST"; then
+  elif ! grep -q "## Session Start" "$CLAUDE_DST"; then
     echo "" >> "$CLAUDE_DST"
     sed "s/<yourname>/$YOURNAME/g" "$CLAUDE_SRC" >> "$CLAUDE_DST"
     echo "  [ok] ~/.claude/CLAUDE.md updated with bootstrap template"
