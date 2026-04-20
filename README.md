@@ -178,6 +178,7 @@ These show the full persona structure: framework, output types, failure modes, r
 | `templates/CLAUDE.md` | Standalone CLAUDE.md starter — copy to `~/.claude/CLAUDE.md` |
 | `templates/sync-launcher.sh` | Source for the standalone sync launcher written to `~/Desktop/ai/sync.sh` |
 | `templates/username/commands/` | All command files (synced to your `commands/` folder) |
+| `templates/username/personas/PERSONA_ROLE.md` | Blank persona structure — copy and fill in to create a new role |
 | `templates/username/personas/examples/` | Worked persona examples (synced to your `personas/` folder) |
 | `templates/username/plans/SAMPLE-plan.md` | Plan file structure reference |
 | `templates/username/trackers/SAMPLE-tracker.md` | Tracker file structure reference |
