@@ -27,16 +27,21 @@ Run `./setup.sh vijayaa` and it:
 vijayaa/
 ├── PERSONA_vijayaa_GLOBAL.md   ← your voice, style, how you work (built by /create-persona)
 ├── MEMORY_vijayaa_GLOBAL.md    ← active projects, key people, file map
-├── personas/                   ← role-based personas (Debate Coach, etc.)
+├── personas/                   ← role-based personas (Debate Coach, Astrologer, etc.)
 ├── commands/                   ← slash commands you use in Claude
-├── plans/                      ← activity logs — steps taken per goal, per persona
-│   └── debate-coach/
-│       └── PLAN_box-lunches-vs-school-lunches.md
+├── plans/                      ← activity logs and methodology, per persona
+│   ├── debate-coach/
+│   │   └── PLAN_box-lunches-vs-school-lunches.md   ← topic plan (steps taken)
+│   └── astrologer/
+│       └── PLAN_astrologer.md                      ← ongoing plan (patterns + approach)
 ├── projects/                   ← deliverables — docs, HTML, analysis outputs
-│   └── debate-coach/
-│       └── box-lunches-vs-school-lunches/
-│           ├── DEBATE_TOPIC-BRIEF_box-lunches-vs-school-lunches.md
-│           └── DEBATE_SCRIPT-FEEDBACK_box-lunches-vs-school-lunches.md
+│   ├── debate-coach/
+│   │   └── box-lunches-vs-school-lunches/
+│   │       ├── DEBATE_TOPIC-BRIEF_box-lunches-vs-school-lunches.md
+│   │       └── DEBATE_SCRIPT-FEEDBACK_box-lunches-vs-school-lunches.md
+│   └── astrology/
+│       ├── ASTROLOGY_PREDICTIONS_rakesh-2026.md
+│       └── ASTROLOGY_READING_family-april-2026.md
 ├── trackers/                   ← progress tracking against goals
 ├── learnings/                  ← what you captured after completing goals
 ├── evolution/                  ← how your personas changed over time
@@ -70,11 +75,17 @@ vijayaa/
 The real value compounds here:
 
 ```
-/create-persona     → build a role (Debate Coach, Budget Planner, etc.)
-/create-plan        → start an activity log + create the project folder for deliverables
-  ↓ as the session runs
-  each step logged in plans/<persona>/<topic>.md
-  each deliverable saved to projects/<persona>/<topic>/
+/create-persona     → build a role (Debate Coach, Astrologer, Budget Planner, etc.)
+/create-plan        → topic plan (one-off goal) or ongoing plan (recurring persona work)
+
+  Topic plan (e.g. Debate Coach):
+    plans/debate-coach/PLAN_box-lunches-vs-school-lunches.md  ← step-by-step log
+    projects/debate-coach/box-lunches-vs-school-lunches/      ← all deliverables
+
+  Ongoing plan (e.g. Astrologer):
+    plans/astrologer/PLAN_astrologer.md    ← methodology + patterns across sessions
+    projects/astrology/                    ← all readings, predictions, analyses
+
 /create-tracker     → track overall goal progress
   ↓ tracker complete
   learnings file created, persona updates proposed
