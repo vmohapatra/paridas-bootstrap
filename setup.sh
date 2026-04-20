@@ -169,16 +169,17 @@ if ! command -v claude &>/dev/null; then
   echo ""
 fi
 
-# ─── show skill contents (if Claude Code is installed) ────────────────────────
+# ─── append skill to CLAUDE.md (if Claude Code is installed) ─────────────────
 if command -v claude &>/dev/null; then
   SKILL_MD="$REPO_DIR/claude-code/skills/ai-ready-setup/SKILL.md"
-  if [ -f "$SKILL_MD" ]; then
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo " Claude Code skill: ai-ready-setup"
-    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo ""
-    cat "$SKILL_MD"
-    echo ""
+  if [ -f "$SKILL_MD" ] && [ -f "$CLAUDE_DST" ]; then
+    if ! grep -q "ai-ready-setup" "$CLAUDE_DST"; then
+      echo "" >> "$CLAUDE_DST"
+      cat "$SKILL_MD" >> "$CLAUDE_DST"
+      echo "  [ok] ai-ready-setup skill appended to $CLAUDE_DST"
+    else
+      echo "  [skip] ai-ready-setup already in $CLAUDE_DST"
+    fi
   fi
 fi
 
