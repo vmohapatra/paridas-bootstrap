@@ -29,8 +29,15 @@ vijayaa/
 ├── MEMORY_vijayaa_GLOBAL.md    ← active projects, key people, file map
 ├── personas/                   ← role-based personas (Debate Coach, etc.)
 ├── commands/                   ← slash commands you use in Claude
-├── plans/                      ← plans for goals
-├── trackers/                   ← progress tracking against plans
+├── plans/                      ← activity logs — steps taken per goal, per persona
+│   └── debate-coach/
+│       └── PLAN_box-lunches-vs-school-lunches.md
+├── projects/                   ← deliverables — docs, HTML, analysis outputs
+│   └── debate-coach/
+│       └── box-lunches-vs-school-lunches/
+│           ├── DEBATE_TOPIC-BRIEF_box-lunches-vs-school-lunches.md
+│           └── DEBATE_SCRIPT-FEEDBACK_box-lunches-vs-school-lunches.md
+├── trackers/                   ← progress tracking against goals
 ├── learnings/                  ← what you captured after completing goals
 ├── evolution/                  ← how your personas changed over time
 └── insights/                   ← usage reports from /insights
@@ -64,8 +71,11 @@ The real value compounds here:
 
 ```
 /create-persona     → build a role (Debate Coach, Budget Planner, etc.)
-/create-plan        → plan a goal using that persona
-/create-tracker     → track execution against the plan
+/create-plan        → start an activity log + create the project folder for deliverables
+  ↓ as the session runs
+  each step logged in plans/<persona>/<topic>.md
+  each deliverable saved to projects/<persona>/<topic>/
+/create-tracker     → track overall goal progress
   ↓ tracker complete
   learnings file created, persona updates proposed
 /evolve-global-persona → patterns from all your roles → sharpen your global persona

@@ -1,63 +1,23 @@
-# Plan: [Goal or Usecase Name]
+# Plan: [Topic]
 
-**Created:** YYYY-MM-DD
-**Status:** draft | active | paused | complete
-**Goal:** [One sentence — what success looks like when this is done]
-
----
-
-## Context
-
-[Why this goal matters. What problem it solves. What triggered it.]
+**Persona:** [persona name]
+**Topic:** [specific goal or topic]
+**Started:** YYYY-MM-DD
+**Status:** in-progress | complete
+**Project folder:** `projects/[persona-slug]/[topic-slug]/`
 
 ---
 
-## Constraints
+## Session Log
 
-- [time, resource, or scope constraint]
-- [dependency on another person or system]
-
----
-
-## Approach
-
-[Chosen strategy and why. If alternatives were considered, note them briefly and why this was selected.]
+| Date | Step | Deliverable |
+|------|------|-------------|
+| YYYY-MM-DD | [step taken — e.g. generated topic brief with pro/con breakdown] | [DOMAIN_TYPE_topic-slug.md or —] |
+| YYYY-MM-DD | [step taken — e.g. assessed student opening speech] | [DOMAIN_TYPE_topic-slug.md or —] |
+| YYYY-MM-DD | [step taken — e.g. suggested rebuttal structure] | — |
 
 ---
 
-## Phases
+## Notes
 
-### Phase 1 — [name]
-**Goal:** [what this phase delivers]
-**Steps:**
-- [ ] [step]
-- [ ] [step]
-
-### Phase 2 — [name]
-**Goal:** [what this phase delivers]
-**Steps:**
-- [ ] [step]
-- [ ] [step]
-
----
-
-## Decisions & Pivots
-
-| Date | Decision | Reason |
-|------|----------|--------|
-| YYYY-MM-DD | [what was decided or changed] | [why] |
-
----
-
-## Notes & Strategies
-
-[Running notes, research, ideas, observations as the plan evolves.]
-
----
-
-## Open Questions
-
-- [ ] [question that needs an answer before proceeding]
-
----
-*Last updated: YYYY-MM-DD*
+[Running observations, pivots, or context that doesn't fit in the log table.]

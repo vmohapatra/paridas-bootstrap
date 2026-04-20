@@ -104,7 +104,13 @@ Your workspace is always a superset of what bootstrap provides.
     ├── insights/                       ← AI usage insights reports
     ├── learnings/                      ← session and goal learnings
     ├── personas/                       ← role-based personas
-    ├── plans/                          ← implementation and strategy plans
+    ├── plans/                          ← activity logs (steps taken per goal, per persona)
+    │   └── <persona-slug>/             ← e.g. debate-coach/
+    │       └── PLAN_<topic-slug>.md
+    ├── projects/                       ← deliverables (docs, HTML, analysis outputs)
+    │   └── <persona-slug>/             ← e.g. debate-coach/
+    │       └── <topic-slug>/           ← e.g. box-lunches-vs-school-lunches/
+    │           └── DOMAIN_TYPE_topic.md
     ├── commands/                       ← commands (bootstrap + your own)
     ├── trackers/                       ← sprint, goal, and metric trackers
     └── evolution/                      ← persona change history over time

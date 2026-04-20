@@ -1,117 +1,118 @@
 # Create Plan
 
-Generate a structured plan tied to an active persona and a specific goal.
+Start a session log for a goal and create the project folder for its deliverables.
+
+---
+
+## Two things get created
+
+| What | Where | Purpose |
+|------|-------|---------|
+| Plan log | `plans/<persona-slug>/PLAN_<topic-slug>.md` | Activity log — every step taken, linked to outputs |
+| Project folder | `projects/<persona-slug>/<topic-slug>/` | Where all deliverables for this goal live |
 
 ---
 
 ## When to Use
 
-Invoke with `"Create a plan for: [topic/goal]"` or `"Generate plan: [topic/goal]"` when you have:
-- A new topic or goal to prepare for under an active persona
-- A task that needs phases, actions, and success criteria before work starts
-
----
-
-## How It Works
-
-Uses the active persona from session context and the global persona at
-`~/Desktop/ai/<yourname>/PERSONA_<yourname>_GLOBAL.md`.
-No need to re-specify the persona — it is already loaded.
+Invoke with `"Create a plan for: [topic/goal]"` or `"Start plan: [topic/goal]"`.
 
 ---
 
 ## Intake — One Question at a Time
-
-Ask these questions one at a time. Wait for each answer before asking the next.
 
 **Q1. Which persona is driving this plan?**
 Detect from session context first. If unclear, ask:
 > "Which persona should this plan use? e.g. Debate Coach, Mandarin Teacher — or leave blank to use the global persona."
 
 **Q2. What is the specific goal or topic?**
-> Be specific — vague goals produce vague plans.
-
-**Q3. What is the target date or deadline?**
-> If none, note it in the plan and flag it as a risk.
+> Be specific — vague goals produce vague logs.
 
 ---
 
-## Output Structure
+## Plan Log Format
+
+Save to: `~/Desktop/ai/<yourname>/plans/<persona-slug>/PLAN_<topic-slug>.md`
 
 ```
-# Plan: [Goal or Topic]
+# Plan: [Topic]
 
-**Persona:** [active persona]
-**Goal:** [specific outcome]
+**Persona:** [persona name]
+**Topic:** [specific goal or topic]
 **Started:** [today's date]
-**Target:** [deadline or "ongoing"]
-**Status:** not-started
+**Status:** in-progress
+**Project folder:** `projects/<persona-slug>/<topic-slug>/`
 
 ---
 
-## Phases
+## Session Log
 
-| Phase | Name | What it covers |
-|-------|------|----------------|
-| 1 | [phase name] | [description] |
-| 2 | [phase name] | [description] |
-
----
-
-## Phase Breakdown
-
-### Phase 1 — [Name]
-- [ ] [specific action]
-- [ ] [specific action]
-
-### Phase 2 — [Name]
-- [ ] [specific action]
-
----
-
-## Success Criteria
-- [measurable outcome]
-
----
-
-## Risks
-- [known risk and mitigation]
-
----
-*Created: [date] | Persona: [persona name]*
+| Date | Step | Deliverable |
+|------|------|-------------|
+| [today] | [first step taken] | [filename in project folder, or —] |
 ```
 
 ---
 
-## Naming Convention
+## Project Folder
 
-Save to: `~/Desktop/ai/<yourname>/plans/`
-Filename: `[DOMAIN]_PLAN_[topic-slug].md`
+Create immediately when the plan starts:
+`~/Desktop/ai/<yourname>/projects/<persona-slug>/<topic-slug>/`
 
-Derive `[DOMAIN]` from the active persona. Use lowercase kebab-case for the slug.
-
-Examples:
-- `DEBATE_PLAN_box-lunches-vs-school-lunches.md`
-- `MANDARIN_PLAN_hsk1-prep.md`
-- `BUDGET_PLAN_june-2026.md`
+All deliverables for this goal — topic briefs, feedback docs, analysis files, HTML outputs —
+go here. Never save deliverables directly to `plans/`.
 
 ---
 
-## After Saving
+## Logging steps
 
-Confirm the file path, then ask:
-> "Plan saved. Want me to create a tracker for this now?"
+Each time the persona takes an action in this session, append a row to the Session Log:
 
-If yes — run the `create-tracker` command with this plan as the source.
+```
+| 2026-04-19 | Generated topic brief with pro/con breakdown | DEBATE_TOPIC-BRIEF_box-lunches.md |
+| 2026-04-19 | Assessed student opening speech | DEBATE_SCRIPT-FEEDBACK_box-lunches.md |
+| 2026-04-19 | Suggested rebuttal structure | — |
+```
+
+If the step produced a file, link it by filename. If it was advice or analysis with no output file, use `—`.
+
+---
+
+## Naming conventions
+
+**Persona slug:** lowercase kebab-case from the persona name
+- `Debate Coach` → `debate-coach`
+- `Mandarin Teacher` → `mandarin-teacher`
+
+**Topic slug:** lowercase kebab-case from the topic
+- `Box Lunches vs School Lunches` → `box-lunches-vs-school-lunches`
+
+**Deliverable filenames:** `<DOMAIN>_<TYPE>_<topic-slug>.<ext>`
+- `DEBATE_TOPIC-BRIEF_box-lunches-vs-school-lunches.md`
+- `DEBATE_SCRIPT-FEEDBACK_box-lunches-vs-school-lunches.md`
+- `BUDGET_ANALYSIS_june-2026.md`
+- `MANDARIN_EXERCISE_tones-practice.html`
+
+---
+
+## After saving
+
+Confirm both paths:
+> "Plan log created at `plans/debate-coach/PLAN_box-lunches-vs-school-lunches.md`
+> Project folder ready at `projects/debate-coach/box-lunches-vs-school-lunches/`
+> I'll log each step here as we work."
+
+Then proceed with the goal. Log every step as it happens.
 
 ---
 
 ## Rules
 
-- One question at a time — wait for each answer before proceeding
-- Derive phases from the persona's natural workflow — don't use generic phase names
-- If deadline is missing, flag it as a risk in the plan
-- If the user is unsure of phases, suggest the standard phases for that persona type
+- One question at a time — wait for each answer
+- Create the project folder immediately, even if no deliverables exist yet
+- Log every step — including advice and analysis that produced no file
+- Deliverables always go in the project folder, never in plans/
+- Keep the log up to date throughout the session, not just at the end
 
 ---
 *Last updated: 2026-04-19*
