@@ -3,6 +3,8 @@
 A portable AI workspace bootstrap — get a consistent, structured working environment
 on any device in minutes.
 
+> **Before running setup.sh, read [CONSENT.md](CONSENT.md).** Setup requires explicit agreement to the data use notice. If you do not agree, do not proceed.
+
 ---
 
 ## What this repo is
