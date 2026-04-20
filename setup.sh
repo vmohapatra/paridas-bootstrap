@@ -127,6 +127,26 @@ if [ -d "$SKILL_SRC" ]; then
   fi
 fi
 
+# ─── write bootstrap marker ───────────────────────────────────────────────────
+REPO_URL=$(git -C "$REPO_DIR" remote get-url origin 2>/dev/null || echo "unknown")
+cat > "$USER_DIR/.bootstrap-source" <<EOF
+repo=$REPO_URL
+bootstrap_dir=$REPO_DIR
+version=$(cat "$REPO_DIR/VERSION" 2>/dev/null | tr -d '[:space:]')
+setup=$(date +%Y-%m-%d)
+user=$YOURNAME
+EOF
+echo "  [ok] .bootstrap-source marker written"
+
+# ─── install standalone sync launcher ─────────────────────────────────────────
+sed \
+  -e "s|__BOOTSTRAP_DIR__|$REPO_DIR|g" \
+  -e "s|__BOOTSTRAP_REPO__|$REPO_URL|g" \
+  -e "s|__YOURNAME__|$YOURNAME|g" \
+  "$REPO_DIR/templates/sync-launcher.sh" > "$AI_BASE/sync.sh"
+chmod +x "$AI_BASE/sync.sh"
+echo "  [ok] standalone sync launcher written to $AI_BASE/sync.sh"
+
 # ─── summary ──────────────────────────────────────────────────────────────────
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -145,9 +165,31 @@ echo "    ├── evolution/"
 echo "    ├── PERSONA_${YOURNAME}_GLOBAL.md"
 echo "    └── MEMORY_${YOURNAME}_GLOBAL.md"
 echo ""
-echo "Next steps:"
-echo "  1. Fill in PERSONA_${YOURNAME}_GLOBAL.md — communication style, reviewer patterns"
-echo "  2. Fill in MEMORY_${YOURNAME}_GLOBAL.md — replace [placeholders] with your values"
-echo "  3. Review ~/.claude/CLAUDE.md — fill in [CUSTOMIZE] sections for your stack"
-echo "  4. Install Claude Code: https://claude.ai/code"
-echo ""
+if ! command -v claude &>/dev/null; then
+  echo "Next step: install Claude Code — https://claude.ai/code"
+  echo ""
+fi
+
+# ─── persona kickoff (if Claude Code is installed) ────────────────────────────
+if command -v claude &>/dev/null; then
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo " Let's set up your first persona"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo ""
+  echo "A persona tells Claude how to think, communicate, and behave"
+  echo "in a specific role — Debate Coach, Budget Planner, Language Tutor, etc."
+  echo ""
+  printf "What role would you like Claude to take on first? (press Enter to skip): "
+  read -r PERSONA_ROLE
+  if [ -n "$PERSONA_ROLE" ]; then
+    echo ""
+    echo "Starting Claude Code session for: $PERSONA_ROLE"
+    echo ""
+    claude "Create persona for: $PERSONA_ROLE"
+  else
+    echo ""
+    echo "Skipped. When ready, open Claude Code and run:"
+    echo "  /create-persona"
+    echo ""
+  fi
+fi
