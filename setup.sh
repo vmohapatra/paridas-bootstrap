@@ -169,6 +169,19 @@ if ! command -v claude &>/dev/null; then
   echo ""
 fi
 
+# ─── show skill contents (if Claude Code is installed) ────────────────────────
+if command -v claude &>/dev/null; then
+  SKILL_MD="$REPO_DIR/claude-code/skills/ai-ready-setup/SKILL.md"
+  if [ -f "$SKILL_MD" ]; then
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo " Claude Code skill: ai-ready-setup"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+    cat "$SKILL_MD"
+    echo ""
+  fi
+fi
+
 # ─── persona kickoff (if Claude Code is installed) ────────────────────────────
 if command -v claude &>/dev/null; then
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
